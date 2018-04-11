@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="col-md-12">
+    <h1>My To-Dos</h1>
+    <table class="table table-bordered table-striped table-hover">
+      <thead>
+        <tr>
+          <th class="text-center">Sheet Name</th>
+          <th class="text-center">Create Date</th>       
+          <th class="text-center">Notes</th>       
+          <th class="text-center">Active</th>       
+          <th class="text-center"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>       
+          <td class="text-center">Sheet 1</td>
+          <td> class="text-center"Formatted date</td>       
+          <td class="text-center">This is great!</td>
+          <td class="text-center">Yes</td>
+          <td class="text-center">
+            <button class="btn btn-info" (click)="showEditForm(todo)">
+              <i class="glyphicon glyphicon-pencil"></i>
+            </button>
+            <button class="btn btn-danger" (click)="removeToDo(todo)">
+              <i class="glyphicon glyphicon-remove"></i>
+            </button>
+          </td>       
+        </tr>
+      </tbody>
+    </table>
+    <button class="btn btn-success" (click)="showNewForm()">
+      <i class="glyphicon glyphicon-plus"></i>
+    </button>
+  </div>
+ </div>
