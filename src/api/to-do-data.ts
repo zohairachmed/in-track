@@ -1,4 +1,4 @@
-import {Todo} from '../app/to-do/to-do';
+import {Todo} from '../app/components/to-do/to-do';
 
 export const TODO_ITEMS: Todo[] = [
  {

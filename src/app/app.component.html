@@ -17,5 +17,40 @@
     <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
   </li>
 </ul> -->
-<app-to-do></app-to-do>
+
+ 
+<!-- <nav class="navbar navbar-dark bg-dark">
+    <a href="/" class="navbar-brand">Dark</a>
+    <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#collapsingNavbar3">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse" id="collapsingNavbar3">
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+            </li>
+        </ul>
+    </div>
+</nav> -->
+<!-- <button mat-button>My Button</button> -->
+<mat-toolbar color="primary">
+  <mat-toolbar-row>  
+    <button mat-button routerLink="/"><mat-icon>home</mat-icon><b> Home</b></button>
+    <button mat-button routerLink="/ViewSheet"><mat-icon>notes</mat-icon><b> View Sheet</b></button>
+    <button mat-button routerLink="/AddSheet"><mat-icon>add</mat-icon><b> Add Record in Sheet</b></button>
+  <span class="Space"> </span>
+      <button mat-button><b>User</b></button>
+ 
+  </mat-toolbar-row>
+</mat-toolbar>
+<router-outlet></router-outlet> 
+
+
+<!-- <app-to-do></app-to-do> -->
 

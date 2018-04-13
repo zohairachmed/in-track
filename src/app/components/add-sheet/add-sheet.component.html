@@ -1,3 +1,71 @@
-<p>
-  add-sheet works!
-</p>
+<div class="container PageContainer" #Handsonform >
+  <div id="example"></div>
+  <mat-card class="example-card">
+    <mat-card-header>
+      <mat-card-title>Add record in Main sheet</mat-card-title>
+      <mat-card-subtitle>Hit the save button to add record or press cancel to return back</mat-card-subtitle>
+    </mat-card-header>
+    <div class="example-container">
+      <mat-form-field>
+        <input matInput matInput="text" #SheetInput name="SheetInput" placeholder="SheetName">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput matInput="Date" #DateInput name="DateInput" placeholder="Date" value="{{Date}}">
+      </mat-form-field>
+
+      <mat-form-field>
+        <textarea matInput matInput="text" #NotesInput name="NotesInput" placeholder="Notes"></textarea>
+      </mat-form-field>
+
+      <mat-checkbox matInput #OngoingInput name="OngoingInput"> Ongoing
+      </mat-checkbox>
+
+
+
+
+
+      <mat-card-actions>
+        <button mat-raised-button style="float:right" color="accent">Cancel</button>
+        <button mat-raised-button style="float:right" color="primary" (click)="ShowHandsontable(SheetInput.value,DateInput.value,NotesInput.value,OngoingInput.checked, HandsonTable, Handsonform)">Add</button>
+      </mat-card-actions>
+    </div>
+  </mat-card>
+
+  
+
+  <!-- <hot-table [settings]="settingsObj">
+      <hot-column *ngFor="let column of columns" >{{column}}</hot-column> 
+      </hot-table> -->
+</div>
+<div class="container-fluid bottom-container" #HandsonTable style="display:none">
+  <div class="container">
+  <mat-card class="card" >    
+      <mat-card-title style="text-align:center;">{{SheetTitle}}</mat-card-title>
+      <mat-card-subtitle><b>Date:</b> {{Date}}</mat-card-subtitle>
+      <mat-card-subtitle><b>Notes:</b> {{Notes}}</mat-card-subtitle>            
+  </mat-card>
+</div>
+  <hot-table [colHeaders]="true" [rowHeaders]="true" [data]="data" stretchH="all" >
+    <hot-column data="ID" title="ID" type="numeric"></hot-column>
+    <hot-column data="Inventory" title="Inventory" type="numeric"></hot-column>
+    <hot-column data="Title" title="Title" type="text"></hot-column>
+    <hot-column data="Amazon Listing Price" title="Amazon Listing Price" type="numeric"></hot-column>
+    <hot-column data="Supplier Name" title="Supplier Name" type="text"></hot-column>
+    <hot-column data="Supplier Price" title="Supplier Price" type="numeric"></hot-column>
+    <hot-column data="Amazon Fee" title="Amazon Fee" type="numeric"></hot-column>
+    <hot-column data="Taxes" title="Taxes" type="numeric"></hot-column>
+    <hot-column data="Shipping Fee" title="Shipping Fee" type="numeric"></hot-column>
+    <hot-column data="Profit" title="Profit" type="numeric"></hot-column>
+    <hot-column data="Profit Margin" title="Profit Margin" type="numeric"></hot-column>
+    <hot-column data="Status" title="Status" type="checkbox"></hot-column>
+    <hot-column data="Amazon Url" title="Amazon Url" type="text" value="data.AmazonUrl" Header="data.AmazonUrl"></hot-column>
+    <hot-column data="Supplier Url" title="Supplier Url" type="text"></hot-column>
+    <hot-column data="Note" title="Note" type="checkbox"></hot-column>
+    <!--  <hot-column  title="'First Name'" type="'text'" read-only></hot-column>
+  <hot-column  title="'Last Name'" read-only></hot-column>
+  <hot-column  title="'Address'" width="150"></hot-column>
+  <hot-column  title="'Price'" type="'numeric'" width="80" format="'$ 0,0.00'"></hot-column>
+  <hot-column data="isActive" title="'Is active'" type="'checkbox'" checked-template="'Yes'"unchecked-template="'No'"></hot-column> -->
+  </hot-table>
+</div>
