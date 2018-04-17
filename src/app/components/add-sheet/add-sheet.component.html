@@ -1,71 +1,95 @@
-<div class="container PageContainer" #Handsonform >
+<div class="container PageContainer" #Handsonform>
   <div id="example"></div>
   <mat-card class="example-card">
     <mat-card-header>
       <mat-card-title>Add record in Main sheet</mat-card-title>
-      <mat-card-subtitle>Hit the save button to add record or press cancel to return back</mat-card-subtitle>
+      <mat-card-subtitle>Hit the Add button to add record or press cancel to return back</mat-card-subtitle>
     </mat-card-header>
     <div class="example-container">
-      <mat-form-field>
-        <input matInput matInput="text" #SheetInput name="SheetInput" placeholder="SheetName">
-      </mat-form-field>
+      <form class="mat-dialog-content"  #formControl="ngForm">
+        <div class="form">
+          <mat-form-field>
+            <input matInput  class="form-control"  #SheetInput name="SheetInput" [(ngModel)]="SheetTitle" placeholder="SheetName" [required]="true">
+            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form">
+        <mat-form-field>
+          <input matInput  class="form-control"  #DateInput name="DateInput" placeholder="Date"[(ngModel)]="Date"  value="{{Date}}" [required]="true">
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form">
+        <mat-form-field>
+          <textarea matInput  class="form-control"  #NotesInput name="NotesInput" placeholder="Notes" [(ngModel)]="Notes"  [required]="true"></textarea>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form">
+        <mat-checkbox matInput #OngoingInput name="OngoingInput"> Ongoing
+        </mat-checkbox>
 
-      <mat-form-field>
-        <input matInput matInput="Date" #DateInput name="DateInput" placeholder="Date" value="{{Date}}">
-      </mat-form-field>
-
-      <mat-form-field>
-        <textarea matInput matInput="text" #NotesInput name="NotesInput" placeholder="Notes"></textarea>
-      </mat-form-field>
-
-      <mat-checkbox matInput #OngoingInput name="OngoingInput"> Ongoing
-      </mat-checkbox>
+      </div>
 
 
 
-
-
-      <mat-card-actions>
-        <button mat-raised-button style="float:right" color="accent">Cancel</button>
-        <button mat-raised-button style="float:right" color="primary" (click)="ShowHandsontable(SheetInput.value,DateInput.value,NotesInput.value,OngoingInput.checked, HandsonTable, Handsonform)">Add</button>
-      </mat-card-actions>
+        <mat-card-actions>
+          <!-- <button mat-raised-button style="float:right" color="accent">Cancel</button> -->
+          <button mat-raised-button [disabled]="!formControl.valid"   style="float:right" color="primary" (click)="ShowHandsontable(SheetInput.value,DateInput.value,NotesInput.value,OngoingInput.checked, HandsonTable, Handsonform)">Add</button>
+        </mat-card-actions>
+        </form>
     </div>
   </mat-card>
 
-  
+
 
   <!-- <hot-table [settings]="settingsObj">
       <hot-column *ngFor="let column of columns" >{{column}}</hot-column> 
       </hot-table> -->
 </div>
-<div class="container-fluid bottom-container" #HandsonTable style="display:none">
+<div class="container bottom-container" #HandsonTable style="display:none;">
   <div class="container">
-  <mat-card class="card" >    
+    <mat-card class="card">
       <mat-card-title style="text-align:center;">{{SheetTitle}}</mat-card-title>
-      <mat-card-subtitle><b>Date:</b> {{Date}}</mat-card-subtitle>
-      <mat-card-subtitle><b>Notes:</b> {{Notes}}</mat-card-subtitle>            
-  </mat-card>
-</div>
-  <hot-table [colHeaders]="true" [rowHeaders]="true" [data]="data" stretchH="all" >
-    <hot-column data="ID" title="ID" type="numeric"></hot-column>
-    <hot-column data="Inventory" title="Inventory" type="numeric"></hot-column>
-    <hot-column data="Title" title="Title" type="text"></hot-column>
-    <hot-column data="Amazon Listing Price" title="Amazon Listing Price" type="numeric"></hot-column>
-    <hot-column data="Supplier Name" title="Supplier Name" type="text"></hot-column>
-    <hot-column data="Supplier Price" title="Supplier Price" type="numeric"></hot-column>
-    <hot-column data="Amazon Fee" title="Amazon Fee" type="numeric"></hot-column>
-    <hot-column data="Taxes" title="Taxes" type="numeric"></hot-column>
-    <hot-column data="Shipping Fee" title="Shipping Fee" type="numeric"></hot-column>
-    <hot-column data="Profit" title="Profit" type="numeric"></hot-column>
-    <hot-column data="Profit Margin" title="Profit Margin" type="numeric"></hot-column>
-    <hot-column data="Status" title="Status" type="checkbox"></hot-column>
-    <hot-column data="Amazon Url" title="Amazon Url" type="text" value="data.AmazonUrl" Header="data.AmazonUrl"></hot-column>
-    <hot-column data="Supplier Url" title="Supplier Url" type="text"></hot-column>
-    <hot-column data="Note" title="Note" type="checkbox"></hot-column>
-    <!--  <hot-column  title="'First Name'" type="'text'" read-only></hot-column>
+      <mat-card-subtitle>
+        <b>Date:</b> {{Date}}</mat-card-subtitle>
+      <mat-card-subtitle>
+        <b>Notes:</b> {{Notes}}</mat-card-subtitle>
+      <mat-card-subtitle>
+        <b>Ongoing:</b> {{Ongoing}}</mat-card-subtitle>
+      <div class="example-container">
+        <mat-card-actions>
+          <button mat-raised-button style="float:right" color="primary" (click)="PostHandsondata()">Push Request</button>
+        </mat-card-actions>
+      </div>
+    </mat-card>
+  </div>
+  <!-- (afterChange)="detectChanges()" -->
+  <div class="container">
+    <hot-table [colHeaders]="true" render #hotTable [allowEmpty]=false [manualRowMove]="true" [height]="500" [minRows]="20" [manualColumnMove]="true"
+      [rowHeaders]="true" [data]="data" [autoWrapRow]="true" [autoWrapCol]="true" [manualRowResize]="true" [manualColumnResize]="true"
+      [manualColumnFreeze]="true" stretchH="all" [columnSorting]="true">
+      <hot-column data="Handsondata.Inventory" title="Inventory" [renderer]="render" [colWidths]="80" type="numeric"></hot-column>
+      <hot-column data="Handsondata.Title" title="Title" [colWidths]="300" type="text"></hot-column>
+      <hot-column data="Handsondata.AmazonListingPrice" [colWidths]="120" title="Amazon Listing Price" [numericFormat]="{pattern: '$0,0.00', culture: 'en-US' }"
+        type="numeric"></hot-column>
+      <hot-column data="Handsondata.SupplierName" [colWidths]="80" title="Supplier Name" type="text"></hot-column>
+      <hot-column data="Handsondata.SupplierPrice" [colWidths]="80" [numericFormat]="{pattern: '$0,0.00', culture: 'en-US' }" title="Supplier Price"
+        type="numeric"></hot-column>
+      <hot-column data="Handsondata.AmazonFee" [colWidths]="80" title="Amazon Fee" [numericFormat]="{pattern: '$0,0.00', culture: 'en-US' }"
+        type="numeric"></hot-column>
+      <hot-column data="Handsondata.Taxes" [colWidths]="60" title="Taxes" type="numeric"></hot-column>
+      <hot-column data="Handsondata.ShippingFee" [colWidths]="80" [numericFormat]="{pattern: '$0,0.00', culture: 'en-US' }" title="Shipping Fee"
+        type="numeric"></hot-column>
+      <hot-column data="Handsondata.Profit" [colWidths]="60" title="Profit" type="numeric"></hot-column>
+      <hot-column data="Handsondata.ProfitMargin" [colWidths]="80" title="Profit Margin" type="numeric"></hot-column>
+      <hot-column data="Handsondata.AmazonUrl" [colWidths]="300" title="Amazon Url" type="text" value="data.AmazonUrl" Header="data.AmazonUrl"></hot-column>
+      <hot-column data="Handsondata.SupplierUrl" [colWidths]="200" title="Supplier Url" type="text"></hot-column>
+      <!--  <hot-column  title="'First Name'" type="'text'" read-only></hot-column>
   <hot-column  title="'Last Name'" read-only></hot-column>
   <hot-column  title="'Address'" width="150"></hot-column>
   <hot-column  title="'Price'" type="'numeric'" width="80" format="'$ 0,0.00'"></hot-column>
   <hot-column data="isActive" title="'Is active'" type="'checkbox'" checked-template="'Yes'"unchecked-template="'No'"></hot-column> -->
-  </hot-table>
+    </hot-table>
+  </div>
 </div>

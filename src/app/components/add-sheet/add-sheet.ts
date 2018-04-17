@@ -1,5 +1,15 @@
 export interface dataStuct {
-    ID:number;
+    Id:string;
+    SheetName:string;
+    Date:Date;
+    Notes:string;
+    Ongoing:boolean;
+    Handsondata:any[];
+    
+    }
+
+  export interface HandsondataInt {
+    
       Inventory:number;
       Title:string;
       AmazonListingPrice:number;
@@ -9,10 +19,9 @@ export interface dataStuct {
       Taxes:number;
       ShippingFee:number;    
       Profit:number;
-      ProfitMargin:number;
-      Status:boolean;
+      ProfitMargin:number;     
       AmazonUrl:string;
       SupplierUrl:string;
-      Note:boolean;
       
+    
     }

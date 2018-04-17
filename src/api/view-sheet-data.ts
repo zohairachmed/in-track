@@ -1,12 +1,18 @@
 import {ViewSheetsElement} from '../app/components/view-sheets/view-sheets';
+import { UUID } from 'angular2-uuid';
 
 export const ELEMENT_DATA: ViewSheetsElement[] = [
     
-    {Id:1, SheetName:"Sheet2", Date: new Date(new Date().setDate(new Date().getDate() + 1)), Notes:"hello", Ongoing:true},
-    {Id:2,SheetName:"Sheet3", Date: new Date(new Date().setDate(new Date().getDate() + 1)), Notes:"hello3", Ongoing:true},
-    {Id:3,SheetName:"Sheet4", Date: new Date(new Date().setDate(new Date().getDate() + 1)), Notes:"hello3", Ongoing:false},
-    {Id:4,SheetName:"Sheet5", Date: new Date(new Date().setDate(new Date().getDate() + 1)), Notes:"hello4", Ongoing:true},
-    {Id:5,SheetName:"Sheet6", Date: new Date(new Date().setDate(new Date().getDate() + 1)), Notes:"hello5", Ongoing:false}
+    {Id: UUID.UUID(), SheetName:"Sheet2", Date: new Date(new Date().setDate(new Date().getDate() + 1)), Notes:"hello", Ongoing:true},
+    {Id:UUID.UUID(),SheetName:"Sheet3", Date: new Date(new Date().setDate(new Date().getDate() + 1)), Notes:"hello3", Ongoing:true},
+    {Id:UUID.UUID(),SheetName:"Sheet4", Date: new Date(new Date().setDate(new Date().getDate() + 1)), Notes:"hello3", Ongoing:false},
+    {Id:UUID.UUID(),SheetName:"Sheet5", Date: new Date(new Date().setDate(new Date().getDate() + 1)), Notes:"hello4", Ongoing:true},
+    {Id:UUID.UUID(),SheetName:"Sheet6", Date: new Date(new Date().setDate(new Date().getDate() + 1)), Notes:"hello5", Ongoing:false},
+     {Id:UUID.UUID(), SheetName:"Sheet2", Date: new Date(new Date().setDate(new Date().getDate() + 1)), Notes:"hello", Ongoing:true},
+    {Id:UUID.UUID(),SheetName:"Sheet3", Date: new Date(new Date().setDate(new Date().getDate() + 1)), Notes:"hello3", Ongoing:true},
+    {Id:UUID.UUID(),SheetName:"Sheet4", Date: new Date(new Date().setDate(new Date().getDate() + 1)), Notes:"hello3", Ongoing:false},
+    {Id:UUID.UUID(),SheetName:"Sheet5", Date: new Date(new Date().setDate(new Date().getDate() + 1)), Notes:"hello4", Ongoing:true},
+    {Id:UUID.UUID(),SheetName:"Sheet6", Date: new Date(new Date().setDate(new Date().getDate() + 1)), Notes:"hello5", Ongoing:false}
     // {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
     // {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
     // {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},

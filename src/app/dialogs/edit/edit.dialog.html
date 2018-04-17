@@ -1,0 +1,49 @@
+<div class="container">
+  
+
+  <form class="mat-dialog-content"  #formControl="ngForm">
+
+    <!-- <div class="form">
+      <mat-form-field color="accent">
+        <input matInput #input class="form-control" placeholder="Id" [(ngModel)]="data.Id" name="Id" [required]="true" >
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </div> -->
+
+    <!--Textarea for demo purposes-->
+    <div class="form">
+      <mat-form-field color="accent">
+        <input matInput #SheetNameinput class="form-control" placeholder="SheetName" [(ngModel)]="data.SheetName" name="SheetName" required >
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <!--Contains mat-hint for characters count and has maxLengt set-->
+    <div class="form">
+      <mat-form-field color="accent">
+        <input matInput #Notesinput class="form-control" placeholder="Notes" [(ngModel)]="data.Notes" name="Notes"  required >
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        
+      </mat-form-field>
+    </div>
+    <div class="form">
+      <mat-form-field color="accent">
+        <input matInput #Dateinput class="form-control" placeholder="Date" [(ngModel)]="data.Date" name="Date" required disabled>
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>      
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+          <mat-checkbox matInput #OngoingInput [(ngModel)]="data.Ongoing" name="OngoingInput"> Ongoing </mat-checkbox>
+    </div>
+
+    
+
+    
+
+    <div mat-dialog-actions>
+      <button mat-raised-button color="primary" [type]="submit" [disabled]="!formControl.valid" (click)="stopEdit(data)">Save</button>
+      <button mat-raised-button color="primary" (click)="onNoClick()" tabindex="-1">Cancel</button>
+    </div>
+  </form>
+</div>

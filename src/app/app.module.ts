@@ -1,6 +1,6 @@
+import {HotTableModule} from '@handsontable/angular';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { MatButtonModule,MatTableModule,MatCardModule, MatToolbarModule,MatFormFieldModule,MatInputModule, MatOptionModule, MatIconModule,MatCheckboxModule,MatSelectModule } from '@angular/material';
 import { AppComponent } from './app.component';
 import { ToDoComponent } from './components/to-do/to-do.component';
 import { TodoService } from './components/to-do/to-do.service';
@@ -10,8 +10,27 @@ import { ViewSheetsComponent } from './components/view-sheets/view-sheets.compon
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {RouterModule, Routes} from '@angular/router';
 import { ViewSheetServices } from './components/view-sheets/view-sheets.service';
-import { HotTableModule } from '@handsontable/angular';
+// import { HotTableModule } from '@handsontable/angular';
 import { AddSheetServices } from './components/add-sheet/add-sheet.service';
+import{ DeleteDialogComponent} from './dialogs/delete/delete.dialog.component';
+import {EditDialogComponent} from './dialogs/edit/edit.dialog.component';
+// import {HttpClientModule} from '@angular/common/http';
+import { MatButtonModule,
+  MatTableModule, 
+  MatCardModule
+  , MatToolbarModule
+  ,MatFormFieldModule
+  ,MatInputModule
+  ,MatDialogModule
+  , MatOptionModule
+  , MatIconModule
+  ,MatCheckboxModule
+  ,MatSelectModule,
+  MatPaginatorModule,
+  MatSortModule } from '@angular/material';
+
+
+
 
 
 
@@ -23,11 +42,12 @@ var appRoutes: Routes =[
 
 @NgModule({
   declarations: [
+    EditDialogComponent,
     AppComponent,
-    ToDoComponent,
+    ToDoComponent,    
     AddSheetComponent,
-    ViewSheetsComponent
-   
+    ViewSheetsComponent,
+    DeleteDialogComponent
     
     
 
@@ -36,9 +56,12 @@ var appRoutes: Routes =[
     BrowserModule,
     MatCheckboxModule,
     FormsModule,
-    MatCardModule,    
+    MatCardModule,   
+    MatDialogModule,
     ReactiveFormsModule,
-       MatButtonModule,       
+       MatButtonModule, 
+       MatPaginatorModule,
+  MatSortModule ,      
        BrowserAnimationsModule,
        MatToolbarModule,
        MatIconModule,
@@ -48,10 +71,15 @@ var appRoutes: Routes =[
        MatOptionModule,
        MatInputModule,
        HotTableModule,
+       
        RouterModule.forRoot(appRoutes)
   ],
   exports:[
     
+  ],
+  entryComponents: [
+    EditDialogComponent,
+    DeleteDialogComponent
   ],
   providers: [TodoService, ViewSheetServices,AddSheetServices],
   bootstrap: [AppComponent]

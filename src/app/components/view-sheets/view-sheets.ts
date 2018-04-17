@@ -1,5 +1,6 @@
+
 export interface ViewSheetsElement {
-    Id:number;
+    Id:string;
     SheetName: string;
     Date: Date;
       Notes: string;

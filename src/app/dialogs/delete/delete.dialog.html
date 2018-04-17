@@ -1,0 +1,43 @@
+<div class="container">
+  <h3 mat-dialog-title>Confirm Delete?</h3>
+  <div mat-dialog-content>
+    <table>
+      <tr>
+        <td>    Id:    </td>
+        <td><b> {{data.Id}} </b></td>
+      </tr>
+      <tr>
+          <td>    Sheet_Name:    </td>
+          <td><b> {{data.SheetName}} </b></td>
+        </tr>
+        <tr>
+            <td>     Ongoing:   </td>
+            <td><b>  {{data.Ongoing}} </b></td>
+          </tr>
+          <tr>
+              <td>     Date:   </td>
+              <td><b>  {{data.Date}}  </b></td>
+            </tr>
+            <tr>
+                <td>    Notes:    </td>
+                <td><b>  {{data.Notes}} </b></td>
+              </tr>
+      
+    </table>
+     
+    <!-- <p></p>
+     
+    <p></p>
+    
+    <p></p>
+   
+    <p></p>
+    
+    <p></p> -->
+  </div>
+
+  <div mat-dialog-actions>
+    <button mat-raised-button color="accent" (click)="confirmDelete()">Delete</button>
+    <button mat-raised-button color="primary" (click)="onNoClick()" tabindex="-1">Cancel</button>
+  </div>
+</div>

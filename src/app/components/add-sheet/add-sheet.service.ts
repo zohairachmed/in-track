@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 
-import { dataStuct } from './add-sheet';
-import { dataStucts } from '../../../api/add-sheet-handsontable-data';
+import { dataStuct, HandsondataInt } from './add-sheet';
+import { dataStucts,Handsondat } from '../../../api/add-sheet-handsontable-data';
 
 @Injectable()
 export class AddSheetServices {
   pItems: dataStuct[] = dataStucts;
+  
 
   constructor() { 
     
@@ -18,8 +19,8 @@ export class AddSheetServices {
     this.pItems.push(todo);
   }
   updateTodo(todo: dataStuct) {
-    const index = this.pItems.map(x => x.ID).indexOf(todo.ID);
-    this.pItems[index] = todo;
+    // const index = this.pItems.map(x => x.ID).indexOf(todo.ID);
+    // this.pItems[index] = todo;
   }
   deleteTodo(todo: dataStuct) {
     this.pItems.splice(this.pItems.indexOf(todo), 1);
