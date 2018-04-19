@@ -20,7 +20,7 @@ DataClass: ViewSheetsElement;
                }
 
   onNoClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
     // console.log(this.dataService);
     // this.pItems = this.dataService.pItems;
   }
@@ -31,6 +31,7 @@ DataClass: ViewSheetsElement;
     this.viewsheetService.deleteTodo(this.data);
     // console.log(this.DataClass)
    // this.dataService.deleteIssue(this.data.Id);
-    this.dialogRef.close();
+     this.dialogRef.close(true);
+   
   }
 }

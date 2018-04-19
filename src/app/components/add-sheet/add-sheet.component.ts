@@ -1,6 +1,7 @@
-import { Component, OnInit, Renderer2, ChangeDetectorRef, ViewChild } from '@angular/core';
+
+import { Component, OnInit, Renderer2, ChangeDetectorRef, ViewChild, ViewContainerRef } from '@angular/core';
 import * as Handsontable from 'handsontable';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import { MatDialog} from '@angular/material';
 import { AddSheetServices } from './add-sheet.service';
 import { dataStuct, HandsondataInt } from './add-sheet';
 import { trigger, state, transition, style, animate } from '@angular/animations';
@@ -8,7 +9,10 @@ import { HotTableModule } from '@handsontable/angular';
 import { HotTableRegisterer } from '@handsontable/angular';
 import {FormControl, Validators} from '@angular/forms';
 import { UUID } from 'angular2-uuid';
-
+import { Router} from '@angular/router';
+import {OnemptyComponent} from '../../dialogs/onempty/onempty.component';
+import { ToastsManager } from 'ng2-toastr';
+import { ViewSheetServices } from '../view-sheets/view-sheets.service';
 
 
 @Component({
@@ -19,13 +23,16 @@ import { UUID } from 'angular2-uuid';
 })
 export class AddSheetComponent implements OnInit {
   @ViewChild('hotTable') hot
-  data: dataStuct[];
+  data: any;//dataStuct[];
   rend: Renderer2;
   Date: Date;
   SheetTitle: string;
   Notes: string;
   Ongoing: boolean;
   JsonData: dataStuct[];
+  step = 0;
+  router : Router;
+  
 
 
   // settingsObj: Handsontable.GridSettings = {
@@ -39,17 +46,31 @@ export class AddSheetComponent implements OnInit {
   //   rowHeaders: true
   // }
 
-  constructor(private _AddSheetServices: AddSheetServices, public renderer: Renderer2,
-    private refs: ChangeDetectorRef) {
-    this.data = _AddSheetServices.getTodosFromData();
+  constructor(private _AddSheetServices: AddSheetServices, public renderer: Renderer2, public dialog: MatDialog,
+    private refs: ChangeDetectorRef, private routers:Router, public toastr: ToastsManager, vcr: ViewContainerRef ) {
+    this.data = []// _AddSheetServices.getTodosFromData();
     this.rend = renderer;
+    this.router = routers;   
     this.Date = new Date(new Date().setDate(new Date().getDate() + 0));
+    this.toastr.setRootViewContainerRef(vcr);
+      
 
   }
 
   ngOnInit() {
     //console.log (this.data);
+    
+  }
+  setStep(index: number) {
+    this.step = index;
+  }
 
+  nextStep() {
+    this.step++;
+  }
+
+  prevStep() {
+    this.step--;
   }
   formControl = new FormControl('', [
     
@@ -69,45 +90,25 @@ export class AddSheetComponent implements OnInit {
     if (value < 8 && value !== null) {
       td.style.backgroundColor = "red"
     }
-
-    // console.log(value);
-
-    // this.RowCount = value;
-    // console.log("final="+ this.RowCount);
-
-    // console.log(instance.countEmptyRows());
-    // console.log(instance.getInstance());
-    // console.log(instance.getSourceData());
-    // console.log(row);
-    // console.log(col);
-    // console.log(instance.isEmptyRow());
-
-
   }
 
 
 
   PostHandsondata() {
-    // console.log(this.hot.getInstance());
-    //   console.log(this.hot.data.isNull);
-    //  console.log(this.hot);
-
-    // var data = hot_instance.getData();
-    //console.log(data); 
-
-
-    //console.log(this.hot.hotInstance.getDataAtRow("2"));
-    // console.log(this.hot.hotInstance.getDataAtRow("3"));
-    //console.log(aa.handsontable.rowHeaders.value)
+    
     var array: any[] = [];
-    for (let index = 0; index < this.data.length; index++) {
+    console.log(this.hot.hotInstance.getData().length);
+    for (let index = 0; index < this.hot.hotInstance.getData().length; index++) {
       if (this.hot.hotInstance.getDataAtRow(index)[1]) {
         array.push(this.data[index].Handsondata);
       }
-    };
-    console.log(array);
+    };   
+   
     if(array.length < 1){
-      alert("fill")
+      this.toastr.error('Empty Data set', 'Required',{positionClass: 'toast-bottom-right'});
+      const dialogRef = this.dialog.open(OnemptyComponent);
+      dialogRef.afterClosed().subscribe(result => {
+        });
     }else{
       let uuid = UUID.UUID();
     this.JsonData = [{
@@ -119,7 +120,23 @@ export class AddSheetComponent implements OnInit {
       Notes: this.Notes,
       Ongoing: this.Ongoing
     }];
-    console.log(this.JsonData);
+    this._AddSheetServices.addTodo(this.JsonData);
+    this.toastr.success('Sheet Added','',{positionClass: 'toast-bottom-right'});
+    array = [];
+    
+  //   for (let index = 0; index < this.hot.hotInstance.getData().length; index++) {      
+  //       this.data[index].Handsondata = [];
+  //     }
+  //   this.JsonData = [];
+    
+  //   //this.hot.hotInstance.loadData([]);
+  //  // this.hot.hotInstance.render();
+  //   setTimeout(() => {
+  //     this.router.navigate(['/ViewSheet']);
+  //   }, 1000); 
+    
+ 
+   
   }
 }
 
@@ -132,8 +149,8 @@ export class AddSheetComponent implements OnInit {
     this.Notes = NotesInput;
     this.Date = new Date(new Date().setDate(new Date().getDate() + 0));
     this.Ongoing = OngoingInput;
-    this.rend.setStyle(Handsonform, 'display', 'none');
-    this.rend.setStyle(HandsonTable, 'display', 'block');
+    // this.rend.setStyle(Handsonform, 'display', 'none');
+    // this.rend.setStyle(HandsonTable, 'display', 'block');
 
   }
 }

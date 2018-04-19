@@ -31,11 +31,11 @@ export class EditDialogComponent {
   // }
 
   onNoClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
   stopEdit(): void {
     this.viewsheetService.updateTodo(this.data);
-    this.dialogRef.close();
+    this.dialogRef.close(true);
   }
 }

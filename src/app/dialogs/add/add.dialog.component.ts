@@ -13,29 +13,29 @@ import { ViewSheetsElement } from '../../components/view-sheets/view-sheets';
 
 export class AddDialogComponent {
   constructor(public dialogRef: MatDialogRef<AddDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any,
-              public dataService: DataService) { }
+              @Inject(MAT_DIALOG_DATA) public data: any
+      ) { }
 
   formControl = new FormControl('', [
     Validators.required
     // Validators.email,
   ]);
 
-  getErrorMessage() {
-    return this.formControl.hasError('required') ? 'Required field' :
-      this.formControl.hasError('email') ? 'Not a valid email' :
-        '';
-  }
+  // getErrorMessage() {
+  //   return this.formControl.hasError('required') ? 'Required field' :
+  //     this.formControl.hasError('email') ? 'Not a valid email' :
+  //       '';
+  // }
 
-  submit() {
-  // emppty stuff
-  }
+  // submit() {
+  // // emppty stuff
+  // }
 
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
+  // onNoClick(): void {
+  //   this.dialogRef.close();
+  // }
 
-  public confirmAdd(): void {
-    this.dataService.addIssue(this.data);
-  }
+  // public confirmAdd(): void {
+  //   // this.dataService.addIssue(this.data);
+  // }
 }

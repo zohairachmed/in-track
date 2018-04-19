@@ -1,4 +1,151 @@
-<div class="container PageContainer" #Handsonform>
+
+<mat-accordion class="example-headers-align">
+    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+      <mat-icon>edit</mat-icon>
+        </mat-panel-title>
+        <mat-panel-description>
+          Add sheet information
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+  
+      <div class="PageContainer mat-elevation-z8" #Handsonform>
+          <div id="example"></div>
+          <mat-card class="example-card">
+            <mat-card-header>
+              <mat-card-title>Add record in Main sheet</mat-card-title>
+              <mat-card-subtitle>Hit the Next button to work with sheet</mat-card-subtitle>
+            </mat-card-header>
+            <div class="example-container">
+              <form class="mat-dialog-content"  #formControl="ngForm">
+                <div class="form">
+                  <mat-form-field>
+                    <input matInput  class="form-control"  #SheetInput name="SheetInput" [(ngModel)]="SheetTitle" placeholder="SheetName" [required]="true">
+                    <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="form">
+                <mat-form-field>
+                  <input matInput  class="form-control"  #DateInput name="DateInput" placeholder="Date"[(ngModel)]="Date"  value="{{Date}}" [required]="true">
+                  <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="form">
+                <mat-form-field>
+                  <textarea matInput  class="form-control"  #NotesInput name="NotesInput" placeholder="Notes" [(ngModel)]="Notes"  [required]="true"></textarea>
+                  <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="form">
+                <mat-checkbox matInput #OngoingInput name="OngoingInput"> Ongoing
+                </mat-checkbox>
+        
+              </div>
+        
+        
+        
+                <!-- <mat-card-actions>
+               
+                  <button mat-raised-button [disabled]="!formControl.valid"   style="float:right" color="primary" (click)="ShowHandsontable(SheetInput.value,DateInput.value,NotesInput.value,OngoingInput.checked, HandsonTable, Handsonform)">Add</button>
+                </mat-card-actions> -->
+                </form>
+            </div>
+          </mat-card>
+         
+        </div>
+  
+      <mat-action-row>
+        <button (click)="ShowHandsontable(SheetInput.value,DateInput.value,NotesInput.value,OngoingInput.checked, HandsonTable, Handsonform)" mat-raised-button [disabled]="!formControl.valid" color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  
+    
+  
+    <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle="true" disabled>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+            <mat-icon>date_range</mat-icon>
+        </mat-panel-title>
+        <mat-panel-description>
+          <b>Sheet Title: {{SheetTitle}}</b>       
+        </mat-panel-description>
+      </mat-expansion-panel-header> 
+     
+      <div class="bottom-container" #HandsonTable>
+          <div class="mat-elevation-z8">
+            <mat-card class="card">              
+              <mat-card-subtitle>
+                <b>Date: {{Date}}</b></mat-card-subtitle>
+              <mat-card-subtitle>
+                <b>Notes: {{Notes}}</b></mat-card-subtitle>
+              <mat-card-subtitle>
+                <b>Ongoing: {{Ongoing}}</b> </mat-card-subtitle>
+              <div class="example-container">
+                <!-- <mat-card-actions>
+                  <button mat-raised-button style="float:right" color="primary" (click)="PostHandsondata()">Push Request</button>
+                </mat-card-actions> -->
+              </div>
+            </mat-card>
+          </div>
+          
+          <div class=""  >
+            <hot-table [colHeaders]="true" render #hotTable [allowEmpty]=true [manualRowMove]="true" [height]="500" [minRows]="20" [manualColumnMove]="true"
+              [rowHeaders]="true" [data]="data" [autoWrapRow]="true" [autoWrapCol]="true" [manualRowResize]="true" [manualColumnResize]="true"
+              [manualColumnFreeze]="true" stretchH="all" [columnSorting]="true">
+              <hot-column data="Handsondata.Inventory" title="Inventory" [renderer]="render" [colWidths]="80" type="numeric"></hot-column>
+              <hot-column data="Handsondata.Title" title="Title" [colWidths]="300" type="text"></hot-column>
+              <hot-column data="Handsondata.AmazonListingPrice" [colWidths]="120" title="Amazon Listing Price" [numericFormat]="{pattern: '$0,0.00', culture: 'en-US' }"
+                type="numeric"></hot-column>
+              <hot-column data="Handsondata.SupplierName" [colWidths]="80" title="Supplier Name" type="text"></hot-column>
+              <hot-column data="Handsondata.SupplierPrice" [colWidths]="80" [numericFormat]="{pattern: '$0,0.00', culture: 'en-US' }" title="Supplier Price"
+                type="numeric"></hot-column>
+              <hot-column data="Handsondata.AmazonFee" [colWidths]="80" title="Amazon Fee" [numericFormat]="{pattern: '$0,0.00', culture: 'en-US' }"
+                type="numeric"></hot-column>
+              <hot-column data="Handsondata.Taxes" [colWidths]="60" title="Taxes" type="numeric"></hot-column>
+              <hot-column data="Handsondata.ShippingFee" [colWidths]="80" [numericFormat]="{pattern: '$0,0.00', culture: 'en-US' }" title="Shipping Fee"
+                type="numeric"></hot-column>
+              <hot-column data="Handsondata.Profit" [colWidths]="60" title="Profit" type="numeric"></hot-column>
+              <hot-column data="Handsondata.ProfitMargin" [colWidths]="80" title="Profit Margin" type="numeric"></hot-column>
+              <hot-column data="Handsondata.AmazonUrl" [colWidths]="300" title="Amazon Url" type="text" value="data.AmazonUrl" Header="data.AmazonUrl"></hot-column>
+              <hot-column data="Handsondata.SupplierUrl" [colWidths]="200" title="Supplier Url" type="text"></hot-column>
+             
+            </hot-table>
+          </div>
+        </div>
+  
+      <mat-action-row>
+        <button mat-button color="warn" (click)="prevStep()">Previous</button>
+        <button  mat-button color="primary"(click)="PostHandsondata()" (click)="nextStep()">Push Request</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  
+  </mat-accordion>
+  <!-- <div class=""  >
+    
+      <hot-table [colHeaders]="true" render #hotTable [allowEmpty]=false [manualRowMove]="true" [height]="500" [minRows]="20" [manualColumnMove]="true"
+        [rowHeaders]="true" [data]="data" [autoWrapRow]="true" [autoWrapCol]="true" [manualRowResize]="true" [manualColumnResize]="true"
+        [manualColumnFreeze]="true" stretchH="all" [columnSorting]="true">
+        <hot-column data="Handsondata.Inventory" title="Inventory" [renderer]="render" [colWidths]="80" type="numeric"></hot-column>
+        <hot-column data="Handsondata.Title" title="Title" [colWidths]="300" type="text"></hot-column>
+        <hot-column data="Handsondata.AmazonListingPrice" [colWidths]="120" title="Amazon Listing Price" [numericFormat]="{pattern: '$0,0.00', culture: 'en-US' }"
+          type="numeric"></hot-column>
+        <hot-column data="Handsondata.SupplierName" [colWidths]="80" title="Supplier Name" type="text"></hot-column>
+        <hot-column data="Handsondata.SupplierPrice" [colWidths]="80" [numericFormat]="{pattern: '$0,0.00', culture: 'en-US' }" title="Supplier Price"
+          type="numeric"></hot-column>
+        <hot-column data="Handsondata.AmazonFee" [colWidths]="80" title="Amazon Fee" [numericFormat]="{pattern: '$0,0.00', culture: 'en-US' }"
+          type="numeric"></hot-column>
+        <hot-column data="Handsondata.Taxes" [colWidths]="60" title="Taxes" type="numeric"></hot-column>
+        <hot-column data="Handsondata.ShippingFee" [colWidths]="80" [numericFormat]="{pattern: '$0,0.00', culture: 'en-US' }" title="Shipping Fee"
+          type="numeric"></hot-column>
+        <hot-column data="Handsondata.Profit" [colWidths]="60" title="Profit" type="numeric"></hot-column>
+        <hot-column data="Handsondata.ProfitMargin" [colWidths]="80" title="Profit Margin" type="numeric"></hot-column>
+        <hot-column data="Handsondata.AmazonUrl" [colWidths]="300" title="Amazon Url" type="text" value="data.AmazonUrl" Header="data.AmazonUrl"></hot-column>
+        <hot-column data="Handsondata.SupplierUrl" [colWidths]="200" title="Supplier Url" type="text"></hot-column>
+       
+      </hot-table>
+    </div> -->
+<!-- <div class="container PageContainer mat-elevation-z8" #Handsonform>
   <div id="example"></div>
   <mat-card class="example-card">
     <mat-card-header>
@@ -34,21 +181,17 @@
 
 
         <mat-card-actions>
-          <!-- <button mat-raised-button style="float:right" color="accent">Cancel</button> -->
+       
           <button mat-raised-button [disabled]="!formControl.valid"   style="float:right" color="primary" (click)="ShowHandsontable(SheetInput.value,DateInput.value,NotesInput.value,OngoingInput.checked, HandsonTable, Handsonform)">Add</button>
         </mat-card-actions>
         </form>
     </div>
   </mat-card>
+ 
+</div> -->
 
-
-
-  <!-- <hot-table [settings]="settingsObj">
-      <hot-column *ngFor="let column of columns" >{{column}}</hot-column> 
-      </hot-table> -->
-</div>
-<div class="container bottom-container" #HandsonTable style="display:none;">
-  <div class="container">
+<!-- <div class="bottom-container" #HandsonTable style="display:none;">
+  <div class="container mat-elevation-z8">
     <mat-card class="card">
       <mat-card-title style="text-align:center;">{{SheetTitle}}</mat-card-title>
       <mat-card-subtitle>
@@ -64,8 +207,8 @@
       </div>
     </mat-card>
   </div>
-  <!-- (afterChange)="detectChanges()" -->
-  <div class="container">
+  
+  <div class=""  >
     <hot-table [colHeaders]="true" render #hotTable [allowEmpty]=false [manualRowMove]="true" [height]="500" [minRows]="20" [manualColumnMove]="true"
       [rowHeaders]="true" [data]="data" [autoWrapRow]="true" [autoWrapCol]="true" [manualRowResize]="true" [manualColumnResize]="true"
       [manualColumnFreeze]="true" stretchH="all" [columnSorting]="true">
@@ -85,11 +228,12 @@
       <hot-column data="Handsondata.ProfitMargin" [colWidths]="80" title="Profit Margin" type="numeric"></hot-column>
       <hot-column data="Handsondata.AmazonUrl" [colWidths]="300" title="Amazon Url" type="text" value="data.AmazonUrl" Header="data.AmazonUrl"></hot-column>
       <hot-column data="Handsondata.SupplierUrl" [colWidths]="200" title="Supplier Url" type="text"></hot-column>
-      <!--  <hot-column  title="'First Name'" type="'text'" read-only></hot-column>
+     
+    </hot-table>
+  </div>
+</div> -->
+ <!--  <hot-column  title="'First Name'" type="'text'" read-only></hot-column>
   <hot-column  title="'Last Name'" read-only></hot-column>
   <hot-column  title="'Address'" width="150"></hot-column>
   <hot-column  title="'Price'" type="'numeric'" width="80" format="'$ 0,0.00'"></hot-column>
   <hot-column data="isActive" title="'Is active'" type="'checkbox'" checked-template="'Yes'"unchecked-template="'No'"></hot-column> -->
-    </hot-table>
-  </div>
-</div>

@@ -22,4 +22,8 @@
   display: block;
 }
 
-  
+.mat-card:not([class*=mat-elevation-z]) {
+  box-shadow: none;
+  }
+  .container{
+  padding: 0px;}
