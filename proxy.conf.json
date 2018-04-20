@@ -1,0 +1,11 @@
+{
+    "/api": {
+        "target": "http://fcltcdh9s72:8049/",
+        "secure": false,
+        "pathRewrite": {
+      "^/api": ""
+    },
+    "changeOrigin": true
+    }
+}
+

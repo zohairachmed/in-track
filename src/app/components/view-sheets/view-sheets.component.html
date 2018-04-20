@@ -56,14 +56,14 @@
         </mat-form-field>
       </div> -->
 
-  <div class="example-header" [style.display]="selection.isEmpty() ? '' : 'none'">
+  <!-- <div class="example-header" [style.display]="selection.isEmpty() ? '' : 'none'"> -->
     <mat-input-container floatPlaceholder="never">
       <input matInput #filter placeholder="Filter data" color="accent">
     </mat-input-container>
-  </div>
+  <!-- </div>
   <div class="example-header example-selection-header" *ngIf="!selection.isEmpty()">
     {{selection.selected.length}} {{selection.selected.length == 1 ? 'user' : 'users'}} selected
-  </div>
+  </div> -->
   
 
 
@@ -74,10 +74,10 @@
     <mat-table #table [dataSource]="dataSource"class="mat-cell"  matSort>
 
       <!-- Position Column -->
-      <ng-container matColumnDef="Id">
+      <!-- <ng-container matColumnDef="Id">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
         <mat-cell *matCellDef="let ViewSheetsElement"> {{ViewSheetsElement.Id}} </mat-cell>
-      </ng-container>
+      </ng-container> -->
       <ng-container matColumnDef="SheetName">
         <mat-header-cell *matHeaderCellDef mat-sort-header> SheetName </mat-header-cell>
         <mat-cell *matCellDef="let ViewSheetsElement"> {{ViewSheetsElement.SheetName}} </mat-cell>
@@ -93,6 +93,19 @@
       <ng-container matColumnDef="Notes">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Notes </mat-header-cell>
         <mat-cell *matCellDef="let ViewSheetsElement"> {{ViewSheetsElement.Notes}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="createdBy">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> createdBy </mat-header-cell>
+        <mat-cell *matCellDef="let ViewSheetsElement"> {{ViewSheetsElement.createdBy}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="LastupdatedBy">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> LastupdatedBy </mat-header-cell>
+        <mat-cell *matCellDef="let ViewSheetsElement"> {{ViewSheetsElement.LastupdatedBy}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="LastUpdateDate">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> LastUpdateDate </mat-header-cell>
+        <mat-cell *matCellDef="let ViewSheetsElement"> {{ViewSheetsElement.LastUpdateDate}} </mat-cell>
       </ng-container>
 
       <!-- Symbol Column -->

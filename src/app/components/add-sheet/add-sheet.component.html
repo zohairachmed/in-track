@@ -90,9 +90,10 @@
           </div>
           
           <div class=""  >
-            <hot-table [colHeaders]="true" render #hotTable [allowEmpty]=true [manualRowMove]="true" [height]="500" [minRows]="20" [manualColumnMove]="true"
+            <hot-table [colHeaders]="true" render  #hotTable [minSpareRows]="1" [allowEmpty]=true [manualRowMove]="true" [height]="500" [minRows]="20" [manualColumnMove]="true"
               [rowHeaders]="true" [data]="data" [autoWrapRow]="true" [autoWrapCol]="true" [manualRowResize]="true" [manualColumnResize]="true"
               [manualColumnFreeze]="true" stretchH="all" [columnSorting]="true">
+              <hot-column data="Handsondata.rowId" title="rowId"  [readOnly]="true" [colWidths]="80" type="numeric"></hot-column>
               <hot-column data="Handsondata.Inventory" title="Inventory" [renderer]="render" [colWidths]="80" type="numeric"></hot-column>
               <hot-column data="Handsondata.Title" title="Title" [colWidths]="300" type="text"></hot-column>
               <hot-column data="Handsondata.AmazonListingPrice" [colWidths]="120" title="Amazon Listing Price" [numericFormat]="{pattern: '$0,0.00', culture: 'en-US' }"

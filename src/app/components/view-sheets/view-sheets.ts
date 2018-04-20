@@ -5,5 +5,10 @@ export interface ViewSheetsElement {
     Date: Date;
       Notes: string;
       Ongoing: boolean;
+      LastupdatedBy:string,
+      createdBy:string;
+      LastUpdateDate:Date;
+
+      
      
     }

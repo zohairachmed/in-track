@@ -32,6 +32,10 @@ import { MatButtonModule,
   MatPaginatorModule,
   MatExpansionModule,
   MatSortModule } from '@angular/material';
+import { EditSheetComponent } from './components/edit-sheet/edit-sheet.component';
+import { editSheetService } from './components/edit-sheet/edit-sheet.service';
+
+
 
 
 
@@ -42,7 +46,8 @@ import { MatButtonModule,
 var appRoutes: Routes =[
   {path:'', component:ToDoComponent},
   {path:'ViewSheet',component:ViewSheetsComponent},
-  {path:'AddSheet', component:AddSheetComponent}
+  {path:'AddSheet', component:AddSheetComponent},
+  {path:'EditSheet', component:EditSheetComponent}
   ];
 
 @NgModule({
@@ -54,7 +59,8 @@ var appRoutes: Routes =[
     AddSheetComponent,
     ViewSheetsComponent,
     DeleteDialogComponent,
-    OnemptyComponent
+    OnemptyComponent,
+    EditSheetComponent
     
     
     
@@ -97,7 +103,7 @@ var appRoutes: Routes =[
     OnemptyComponent
     
   ],
-  providers: [TodoService, ViewSheetServices,AddSheetServices],
+  providers: [TodoService, ViewSheetServices,AddSheetServices,editSheetService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

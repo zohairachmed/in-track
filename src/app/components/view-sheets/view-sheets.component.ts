@@ -38,7 +38,7 @@ export enum SaveMode {
 
 
 export class ViewSheetsComponent implements OnInit {
-  displayedColumns = ['Id', 'SheetName', 'Date', 'Notes', 'Ongoing', 'Buttons']; 
+  displayedColumns = ['SheetName', 'Date', 'Notes', 'Ongoing','LastupdatedBy', 'createdBy',  'LastUpdateDate', 'Buttons']; 
   formGroup: FormGroup;
   DataSources: any; 
   saveMode: SaveMode = SaveMode.None;
@@ -91,31 +91,31 @@ export class ViewSheetsComponent implements OnInit {
     this.loadData();  
     
   }
-  isAllSelected(): boolean {
-    if (!this.dataSource) { return false; }
-    if (this.selection.isEmpty()) { return false; }
+  // isAllSelected(): boolean {
+  //   if (!this.dataSource) { return false; }
+  //   if (this.selection.isEmpty()) { return false; }
   
-    if (this.filter.nativeElement.value) {
+  //   if (this.filter.nativeElement.value) {
    
-      return this.selection.selected.length == this.dataSource.renderedData.length;
+  //     return this.selection.selected.length == this.dataSource.renderedData.length;
       
-    } else {
+  //   } else {
     
-      return this.selection.selected.length == this.view.data.length;
-    }
-  }
+  //     return this.selection.selected.length == this.view.data.length;
+  //   }
+  // }
 
-  masterToggle() {
-    if (!this.dataSource) { return; }
+  // masterToggle() {
+  //   if (!this.dataSource) { return; }
 
-    if (this.isAllSelected()) {
-      this.selection.clear();
-    } else if (this.filter.nativeElement.value) {
-      this.dataSource.renderedData.forEach(data => this.selection.select(data.Id));
-    } else {
-      this.view.data.forEach(data => this.selection.select(data.Id));
-    }
-  }
+  //   if (this.isAllSelected()) {
+  //     this.selection.clear();
+  //   } else if (this.filter.nativeElement.value) {
+  //     this.dataSource.renderedData.forEach(data => this.selection.select(data.Id));
+  //   } else {
+  //     this.view.data.forEach(data => this.selection.select(data.Id));
+  //   }
+  // }
   
 
   public loadData() {

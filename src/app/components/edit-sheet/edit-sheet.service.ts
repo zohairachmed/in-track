@@ -1,5 +1,5 @@
 
-import { dataStuct, HandsondataInt } from './add-sheet';
+import { dataStuct, HandsondataInt } from './edit-sheet';
 import { dataStucts,Handsondat } from '../../../api/add-sheet-handsontable-data';
 import { UUID } from 'angular2-uuid';
 import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
@@ -14,16 +14,33 @@ const API_URL = "http://localhost:3000/api/";
 // this.httpClient.post(API_URL, todo,{ headers:{'Access-Control-Allow-Origin': '*'} }).subscribe(datas => { 
 
 @Injectable()
-export class AddSheetServices {
-  pItems: dataStuct[];
-  
+export class editSheetService {
+  pItems: dataStuct[] = [];  
   
 
   constructor(private httpClient: HttpClient) { 
     
   }
   
-
+  editSheet():dataStuct[] {
+    this.httpClient.get(API_URL + "getsheetInventory").subscribe(datas => {
+    console.log(datas["data"][0].data);
+      for(var i=0;i<datas["data"].length;i++){
+        this.pItems.push(datas["data"][i].data[0]);
+        //console.log(this.pItems);
+      }
+      console.log(this.pItems);
+      //this.pItems =  datas["data"][0]; 
+      //console.log(this.pItems.data);
+       
+      
+      },
+      (err: HttpErrorResponse) => {
+    //  this.toastrs.error('Error occurred. Details: ' + err.name + ' ' + err.message);
+    });
+    
+    return (this.pItems); 
+   }
   getTodosFromData(): dataStuct[] {
     return this.pItems;
   }

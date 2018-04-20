@@ -196,7 +196,10 @@ export const dataStucts: dataStuct[] = [
     Date: new Date(new Date().setDate(new Date().getDate() + 0)),
     Notes: "",
     Ongoing: true,
-    Handsondata: Handsondat
+    Handsondata: Handsondat,
+    LastupdatedBy:"",
+    createdBy:"",
+    LastUpdateDate:new Date(new Date().setDate(new Date().getDate() + 0))
       
 }
 ]
