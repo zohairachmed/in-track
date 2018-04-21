@@ -1,9 +1,9 @@
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {Component, Inject} from '@angular/core';
-import {FormControl, Validators} from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { Component, Inject } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { ViewSheetsElement } from '../../components/view-sheets/view-sheets';
 import { ELEMENT_DATA } from '../../../api/view-sheet-data';
-import {ViewSheetServices} from '../../components/view-sheets/view-sheets.service';
+import { ViewSheetServices } from '../../components/view-sheets/view-sheets.service';
 
 @Component({
   selector: 'app-baza.dialog',
@@ -13,7 +13,7 @@ import {ViewSheetServices} from '../../components/view-sheets/view-sheets.servic
 export class EditDialogComponent {
 
   constructor(public dialogRef: MatDialogRef<EditDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: ViewSheetsElement, public viewsheetService: ViewSheetServices) { }
+    @Inject(MAT_DIALOG_DATA) public data: ViewSheetsElement, public viewsheetService: ViewSheetServices) { }
 
   formControl = new FormControl('', [
     Validators.required

@@ -8,7 +8,4 @@ export interface ViewSheetsElement {
       LastupdatedBy:string,
       createdBy:string;
       LastUpdateDate:Date;
-
-      
-     
     }
