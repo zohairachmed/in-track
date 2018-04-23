@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-onempty',
@@ -13,10 +13,10 @@ export class OnemptyComponent implements OnInit {
   ngOnInit() {
   }
   onNoClick(): void {
-    
+
     // console.log(this.dataService);
     // this.pItems = this.dataService.pItems;
   }
 
-  
+
 }
