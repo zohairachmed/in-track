@@ -1,12 +1,13 @@
 export interface dataStuct {
-  Id: string;
-  SheetName: string;
-  Date: Date;
-  Notes: string;
-  Ongoing: boolean;
-  LastupdatedBy: string,
-  createdBy: string;
-  LastUpdateDate: Date;
+ sheetId:string;
+    sheetName: string;
+    sheetDate: Date;
+      sheetNotes: string;
+      active: boolean;
+      updated:Date,
+      updatedBy:string;
+      created:Date;
+      createdBy:string;
   Handsondata: any[];
 
 }

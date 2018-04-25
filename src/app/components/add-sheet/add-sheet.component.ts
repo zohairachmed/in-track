@@ -1,4 +1,3 @@
-
 import { Component, OnInit, Renderer2, ChangeDetectorRef, ViewChild, ViewContainerRef } from '@angular/core';
 import * as Handsontable from 'handsontable';
 import { MatDialog } from '@angular/material';
@@ -25,11 +24,11 @@ export class AddSheetComponent implements OnInit {
   @ViewChild('hotTable') hot
   data: any;//dataStuct[];
   rend: Renderer2;
-  Date: Date;
-  SheetTitle: string;
-  Notes: string;
-  Ongoing: boolean;
-  JsonData: dataStuct[];
+  sheetDate: Date;
+  sheetName: string;
+  sheetNotes: string;
+  active: boolean;
+  JsonData: any;
   step = 0;
   router: Router;
 
@@ -49,8 +48,9 @@ export class AddSheetComponent implements OnInit {
     this.data = []// _AddSheetServices.getTodosFromData();
     this.rend = renderer;
     this.router = routers;
-    this.Date = new Date(new Date().setDate(new Date().getDate() + 0));
+    this.sheetDate = new Date(new Date().setDate(new Date().getDate() + 0));
     this.toastr.setRootViewContainerRef(vcr);
+  
 
   }
 
@@ -68,13 +68,12 @@ export class AddSheetComponent implements OnInit {
     // get the count of the rows in the table
     // get the count of the columns in the table.
 
-    for (var rowing = 0; rowing < this.hot.hotInstance.countRows(); rowing++) {  // go through each row of the table
-      // go through each column of the row
-      var cell = this.hot.hotInstance.getCell(rowing, 0);
-      console.log(cell);
-      cell.style.background = "#D3D3D3";
+    // for (var rowing = 0; rowing < this.hot.hotInstance.countRows(); rowing++) {  // go through each row of the table
+    //   // go through each column of the row
+    //   var cell = this.hot.hotInstance.getCell(rowing, 0);
+    //   cell.style.background = "#D3D3D3";
 
-    }
+    // }
   }
 
   prevStep() {
@@ -102,7 +101,7 @@ export class AddSheetComponent implements OnInit {
   }
 
   PostHandsondata() {
-    var array: any[] = [];
+    var data: any[] = [];
     var length = this.hot.hotInstance.getData().length;
     for (var i = 0; i < length; i++) {
       this.hot.hotInstance.setDataAtCell(i, 0, i)
@@ -110,45 +109,44 @@ export class AddSheetComponent implements OnInit {
     //console.log(this.hot.hotInstance.getData().length);
     this.toastr.success('Sheet Added', '', { positionClass: 'toast-bottom-right' });
 
-    setTimeout(() => {
+    setTimeout(() =>  {
 
       for (let index = 0; index < this.hot.hotInstance.getData().length; index++) {
         if (this.hot.hotInstance.getDataAtRow(index)[1]) {
-          array.push(this.data[index].Handsondata);
+          data.push(this.data[index].Handsondata);
 
         }
       };
       // console.log(array);console.log(this.data);console.log(this.hot.hotInstance)
-      if (array.length < 1) {
+      if (data.length < 1) {
         this.toastr.error('Empty Data set', 'Required', { positionClass: 'toast-bottom-right' });
         const dialogRef = this.dialog.open(OnemptyComponent);
         dialogRef.afterClosed().subscribe(result => {
         });
       } else {
         let uuid = UUID.UUID();
-        this.JsonData = [{
-
-          Id: uuid,
-          SheetName: this.SheetTitle,
-          Date: this.Date,
-          Handsondata: array,
-          Notes: this.Notes,
-          Ongoing: this.Ongoing,
-          LastupdatedBy: 'ziad',
-          createdBy: 'Ziad',
-          LastUpdateDate: this.Date
-        }];
+        this.JsonData = {
+          sheetId: uuid,
+          sheetName: this.sheetName,
+          sheetDate: this.sheetDate,
+          data: data,
+          sheetNotes: this.sheetNotes,
+          active: this.active,   
+          updated:this.sheetDate,
+          updatedBy:'zaid',
+          created:this.sheetDate,
+          createdBy:'ziad'
+        };
+        
         this._AddSheetServices.addTodo(this.JsonData);
-
-        array = [];
-
+        data = [];
         for (let index = 0; index < this.hot.hotInstance.getData().length; index++) {
-          this.data[index].Handsondata = [];
+          this.data[index].data = [];
         }
         this.JsonData = [];
-        this.SheetTitle = "";
-        this.Notes = "";
-        this.Date = new Date(new Date().setDate(new Date().getDate() + 0));
+        this.sheetName = "";
+        this.sheetNotes = "";
+        this.sheetDate = new Date(new Date().setDate(new Date().getDate() + 0));
 
 
         //   //this.hot.hotInstance.loadData([]);
@@ -166,10 +164,10 @@ export class AddSheetComponent implements OnInit {
   // }
   ShowHandsontable(SheetInput, DateInput, NotesInput, OngoingInput, HandsonTable, Handsonform) {
     // this.rend.setValue(SheetTitle,SheetInput)
-    this.SheetTitle = SheetInput;
-    this.Notes = NotesInput;
-    this.Date = new Date(new Date().setDate(new Date().getDate() + 0));
-    this.Ongoing = OngoingInput;
+    this.sheetName = SheetInput;
+    this.sheetNotes = NotesInput;
+    this.sheetDate = new Date(new Date().setDate(new Date().getDate() + 0));
+    this.active = OngoingInput;
     // this.rend.setStyle(Handsonform, 'display', 'none');
     // this.rend.setStyle(HandsonTable, 'display', 'block');
 

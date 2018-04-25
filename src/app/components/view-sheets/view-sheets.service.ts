@@ -13,7 +13,8 @@ const API_URL = "http://localhost:8049/in-track/v1/sheets/";
 
 @Injectable()
 export class ViewSheetServices {
-  pItems: ViewSheetsElement[] = []; //= ELEMENT_DATA;
+  pItems: ViewSheetsElement[]= []; //= ELEMENT_DATA;
+  dataLength:any;
   dataChange: BehaviorSubject<ViewSheetsElement[]> = new BehaviorSubject<ViewSheetsElement[]>([]);
   get data(): ViewSheetsElement[] { return this.dataChange.value; }
   viewRef: ViewContainerRef;
@@ -25,12 +26,12 @@ export class ViewSheetServices {
   }
 
   getAllItems() {
-    this.httpClient.get(API_URL + "list", { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true }).subscribe(datas => {
-      console.log(datas);
+    this.httpClient.get(API_URL + "list", { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true }).subscribe(result => {
+ 
       //this.httpClient.get(API_URL + "getsheetInventory").subscribe(datas => {
-
-      for (var i = 0; i < datas["data"].length; i++) {
-        this.pItems.push(datas["data"][i].data[0]);
+      this.dataLength = result;
+      for (var i = 0; i < this.dataLength.length ; i++) {
+        this.pItems.push(result[i]);
         //console.log(this.pItems);
       }
       //this.pItems =  datas["data"][0]; 
@@ -70,12 +71,12 @@ export class ViewSheetServices {
   updateTodo(todo: ViewSheetsElement) {
     console.log(todo);
 
-    const index = this.pItems.map(x => x.Id).indexOf(todo.Id);
-    console.log(index);
-    this.pItems[index] = todo;
+    // const index = this.pItems.map(x => x.Id).indexOf(todo.Id);
+    // console.log(index);
+    // this.pItems[index] = todo;
   }
   deleteTodo(todo: ViewSheetsElement) {
-    const index = this.pItems.findIndex(Items => Items.Id === todo.Id);
-    this.pItems.splice(index, 1);
+    // const index = this.pItems.findIndex(Items => Items.Id === todo.Id);
+    // this.pItems.splice(index, 1);
   }
 }

@@ -78,34 +78,38 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
         <mat-cell *matCellDef="let ViewSheetsElement"> {{ViewSheetsElement.Id}} </mat-cell>
       </ng-container> -->
-      <ng-container matColumnDef="SheetName">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> SheetName </mat-header-cell>
-        <mat-cell *matCellDef="let ViewSheetsElement"> {{ViewSheetsElement.SheetName}} </mat-cell>
+      <ng-container matColumnDef="sheetName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> sheetName </mat-header-cell>
+        <mat-cell *matCellDef="let ViewSheetsElement"> {{ViewSheetsElement.sheetName}} </mat-cell>
       </ng-container>
 
       <!-- Name Column -->
-      <ng-container matColumnDef="Date">
+      <ng-container matColumnDef="sheetDate">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Date </mat-header-cell>
-        <mat-cell *matCellDef="let ViewSheetsElement"> {{ViewSheetsElement.Date | date: 'EE, MMM dd y' }} </mat-cell>
+        <mat-cell *matCellDef="let ViewSheetsElement"> {{ViewSheetsElement.sheetDate | date: 'EE, MMM dd y' }} </mat-cell>
       </ng-container>
 
       <!-- Weight Column -->
-      <ng-container matColumnDef="Notes">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Notes </mat-header-cell>
-        <mat-cell *matCellDef="let ViewSheetsElement"> {{ViewSheetsElement.Notes}} </mat-cell>
+      <ng-container matColumnDef="sheetNotes">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> sheetNotes </mat-header-cell>
+        <mat-cell *matCellDef="let ViewSheetsElement"> {{ViewSheetsElement.sheetNotes}} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="createdBy">
+      <ng-container matColumnDef="updated">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> updated </mat-header-cell>
+        <mat-cell *matCellDef="let ViewSheetsElement"> {{ViewSheetsElement.updated | date: 'EE, MMM dd y'}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="updatedBy">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> updatedBy </mat-header-cell>
+        <mat-cell *matCellDef="let ViewSheetsElement"> {{ViewSheetsElement.updatedBy}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="created">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> created </mat-header-cell>
+        <mat-cell *matCellDef="let ViewSheetsElement"> {{ViewSheetsElement.created | date: 'EE, MMM dd y'}} </mat-cell>
+      </ng-container>
+       <ng-container matColumnDef="createdBy">
         <mat-header-cell *matHeaderCellDef mat-sort-header> createdBy </mat-header-cell>
         <mat-cell *matCellDef="let ViewSheetsElement"> {{ViewSheetsElement.createdBy}} </mat-cell>
-      </ng-container>
-      <ng-container matColumnDef="LastupdatedBy">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> LastupdatedBy </mat-header-cell>
-        <mat-cell *matCellDef="let ViewSheetsElement"> {{ViewSheetsElement.LastupdatedBy}} </mat-cell>
-      </ng-container>
-      <ng-container matColumnDef="LastUpdateDate">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> LastUpdateDate </mat-header-cell>
-        <mat-cell *matCellDef="let ViewSheetsElement"> {{ViewSheetsElement.LastUpdateDate}} </mat-cell>
       </ng-container>
 
       <!-- Symbol Column -->
@@ -113,11 +117,11 @@
             <mat-header-cell *matHeaderCellDef> Ongoing </mat-header-cell>
             <mat-cell *matCellDef="let element"> {{element.Ongoing}} </mat-cell>
           </ng-container> -->
-      <ng-container matColumnDef="Ongoing">
-        <mat-header-cell *matHeaderCellDef> Ongoing
+      <ng-container matColumnDef="active">
+        <mat-header-cell *matHeaderCellDef> active
         </mat-header-cell>
         <mat-cell *matCellDef="let ViewSheetsElement">
-          <mat-checkbox [(ngModel)]="ViewSheetsElement.Ongoing">
+          <mat-checkbox [(ngModel)]="ViewSheetsElement.active">
 
           </mat-checkbox>
         </mat-cell>
@@ -133,6 +137,17 @@
           <button color="accent" mat-icon-button (click)="removeToDo(ViewSheetsElement)">
             <mat-icon>delete</mat-icon>
           </button>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="editSheets">
+        <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+        <mat-cell *matCellDef="let ViewSheetsElement">
+          <button color="primary" mat-raised-button (click)="SheetEdit(ViewSheetsElement.sheetId)"> 
+           
+            <!-- Handsonform, tableContain -->
+            Edit Sheet
+          </button>
+         
         </mat-cell>
       </ng-container>
 

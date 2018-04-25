@@ -13,7 +13,7 @@
     <!--Textarea for demo purposes-->
     <div class="form">
       <mat-form-field color="accent">
-        <input matInput #SheetNameinput class="form-control" placeholder="SheetName" [(ngModel)]="data.SheetName" name="SheetName" required >
+        <input matInput #SheetNameinput class="form-control" placeholder="SheetName" [(ngModel)]="data.sheetName" name="sheetName" required >
         <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
       </mat-form-field>
     </div>
@@ -21,20 +21,20 @@
     <!--Contains mat-hint for characters count and has maxLengt set-->
     <div class="form">
       <mat-form-field color="accent">
-        <input matInput #Notesinput class="form-control" placeholder="Notes" [(ngModel)]="data.Notes" name="Notes"  required >
+        <input matInput #Notesinput class="form-control" placeholder="Notes" [(ngModel)]="data.sheetNotes" name="sheetNotes"  required >
         <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
         
       </mat-form-field>
     </div>
     <div class="form">
       <mat-form-field color="accent">
-        <input matInput #Dateinput class="form-control" placeholder="Date" [(ngModel)]="data.Date" name="Date" required disabled>
+        <input matInput #Dateinput class="form-control" placeholder="sheetDate" [(ngModel)]="data.sheetDate" name="sheetDate" required disabled>
         <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>      
       </mat-form-field>
     </div>
 
     <div class="form">
-          <mat-checkbox matInput #OngoingInput [(ngModel)]="data.Ongoing" name="OngoingInput"> Ongoing </mat-checkbox>
+          <mat-checkbox matInput #OngoingInput [(ngModel)]="data.active" name="OngoingInput"> active </mat-checkbox>
     </div>
 
     

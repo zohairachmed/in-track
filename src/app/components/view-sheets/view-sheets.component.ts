@@ -22,6 +22,7 @@ import 'rxjs/add/observable/fromEvent';
 import { SelectionModel } from '@angular/cdk/collections'
 import { EditDialogComponent } from '../../dialogs/edit/edit.dialog.component';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { Router } from '@angular/router';
 
 
 export enum SaveMode {
@@ -38,19 +39,19 @@ export enum SaveMode {
 
 
 export class ViewSheetsComponent implements OnInit {
-  displayedColumns = ['SheetName', 'Date', 'Notes', 'Ongoing', 'LastupdatedBy', 'createdBy', 'LastUpdateDate', 'Buttons'];
+  displayedColumns = ['sheetName', 'sheetDate', 'sheetNotes', 'active', 'updatedBy', 'createdBy', 'created','updated', 'Buttons', 'editSheets'];
   formGroup: FormGroup;
   DataSources: any;
   saveMode: SaveMode = SaveMode.None;
   headerText: string;
   // datalength:number;
   Arrayextra: any;
-  Date: Date;
-  SheetName: string;
-  Notes: string;
-  Ongoing: boolean;
+  sheetDate: Date;
+  sheetName: string;
+  sheetNotes: string;
+  active: boolean;
   rend: Renderer2;
-  id: string;
+  sheetId: string;
   view: ViewSheetServices;
   // ViewSheetDatabase = new ViewSheetServices();// = new ViewSheetDatabase();
   selection = new SelectionModel<string>(true, []);
@@ -61,13 +62,13 @@ export class ViewSheetsComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
 
-  constructor(private _viewsheetsService: ViewSheetServices, private _formBuilder: FormBuilder, public renderer: Renderer2, public dialog: MatDialog, public toastr: ToastsManager, vcr: ViewContainerRef) {
+  constructor(private router: Router, private _viewsheetsService: ViewSheetServices, private _formBuilder: FormBuilder, public renderer: Renderer2, public dialog: MatDialog, public toastr: ToastsManager, vcr: ViewContainerRef) {
     this.formGroup = _formBuilder.group({
-      'Id': '',
-      'SheetName': '',
-      'Notes': '',
-      'Date': '',
-      'Ongoing': ''
+      'sheetId': '',
+      'sheetName': '',
+      'sheetNotes': '',
+      'sheetDate': '',
+      'active': ''
     });
     this.rend = renderer;
     this.view = _viewsheetsService;
@@ -152,7 +153,7 @@ export class ViewSheetsComponent implements OnInit {
 
   saveUpdateTodo(ViewSheetsElement: ViewSheetsElement) {
     const dialogRef = this.dialog.open(EditDialogComponent, {
-      data: { Date: new Date(new Date().setDate(new Date().getDate() + 0)), Id: ViewSheetsElement.Id, Notes: ViewSheetsElement.Notes, Ongoing: ViewSheetsElement.Ongoing, SheetName: ViewSheetsElement.SheetName }
+      data: { sheetDate: ViewSheetsElement.sheetDate, sheetId: ViewSheetsElement.sheetId, sheetNotes: ViewSheetsElement.sheetNotes, active: ViewSheetsElement.active, sheetName: ViewSheetsElement.sheetName }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -164,7 +165,7 @@ export class ViewSheetsComponent implements OnInit {
 
   removeToDo(ViewSheetsElement: ViewSheetsElement) {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
-      data: { Date: ViewSheetsElement.Date, Id: ViewSheetsElement.Id, Notes: ViewSheetsElement.Notes, Ongoing: ViewSheetsElement.Ongoing, SheetName: ViewSheetsElement.SheetName }
+      data: { sheetDate: ViewSheetsElement.sheetDate, sheetId: ViewSheetsElement.sheetId, sheetNotes: ViewSheetsElement.sheetNotes, active: ViewSheetsElement.active, sheetName: ViewSheetsElement.sheetName }
 
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -173,7 +174,11 @@ export class ViewSheetsComponent implements OnInit {
         this.loadData();
       }
 
-    });
+    })
+  }
+  SheetEdit(sheetId :string){
+    this.router.navigate(['/EditSheet', { sheetId: sheetId }]);
+    //console.log(Id);
   }
 
   cancelEditTodo() {
@@ -246,7 +251,7 @@ export class ExampleDataSourceNew extends DataSource<ViewSheetsElement> {
       // Filter data
       this.filteredData = this._exampleDatabase.data.slice().filter((item: ViewSheetsElement) => {
         console
-        let searchStr = (item.Id + item.SheetName + item.Notes + item.Date).toLowerCase();
+        let searchStr = (item.sheetId + item.sheetName + item.sheetNotes + item.sheetDate).toLowerCase();
 
         return searchStr.indexOf(this.filter.toLowerCase()) != -1;
 
@@ -275,11 +280,11 @@ export class ExampleDataSourceNew extends DataSource<ViewSheetsElement> {
       let propertyB: number | string | Date | boolean = '';
 
       switch (this._sort.active) {
-        case 'Id': [propertyA, propertyB] = [a.Id, b.Id]; break;
-        case 'SheetName': [propertyA, propertyB] = [a.SheetName, b.SheetName]; break;
-        case 'Notes': [propertyA, propertyB] = [a.Notes, b.Notes]; break;
-        case 'Date': [propertyA, propertyB] = [a.Date, b.Date]; break;
-        case 'Ongoing': [propertyA, propertyB] = [a.Ongoing, b.Ongoing]; break;
+        case 'sheetId': [propertyA, propertyB] = [a.sheetId, b.sheetId]; break;
+        case 'sheetName': [propertyA, propertyB] = [a.sheetName, b.sheetName]; break;
+        case 'sheetNotes': [propertyA, propertyB] = [a.sheetNotes, b.sheetNotes]; break;
+        case 'sheetDate': [propertyA, propertyB] = [a.sheetDate, b.sheetDate]; break;
+        case 'sheetactive': [propertyA, propertyB] = [a.active, b.active]; break;
       }
 
       let valueA = isNaN(+propertyA) ? propertyA : +propertyA;

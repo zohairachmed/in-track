@@ -1,55 +1,57 @@
-
 import { dataStuct, HandsondataInt } from './edit-sheet';
-import { dataStucts, Handsondat } from '../../../api/add-sheet-handsontable-data';
+import { dataStucts,Handsondat } from '../../../api/add-sheet-handsontable-data';
 import { UUID } from 'angular2-uuid';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import { ToastsManager } from 'ng2-toastr';
 import { ViewContainerRef, Injectable, Injector } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { inject } from '@angular/core/testing';
 import { ELEMENT_DATA } from '../../../api/view-sheet-data';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-const API_URL = "http://localhost:3000/api/";
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
+
+import 'rxjs/add/operator/delay';
+import 'rxjs/add/observable/of';
+
+// const API_URL = "http://localhost:3000/api/";
+const API_URL = "http://localhost:8049/in-track/v1/sheets/";
 // const API_URL = "http://fcltcdh9s72:8049/in-track/v1/sheets/";
 // this.httpClient.post(API_URL, todo,{ headers:{'Access-Control-Allow-Origin': '*'} }).subscribe(datas => { 
 
 @Injectable()
 export class editSheetService {
-  pItems: dataStuct[] = [];
+  pItems: any[] =[];
+  
 
-
-  constructor(private httpClient: HttpClient) {
-
+  constructor(private httpClient: HttpClient) { 
+    
   }
-
-  editSheet(): dataStuct[] {
-    this.httpClient.get(API_URL + "getsheetInventory").subscribe(datas => {
-      console.log(datas["data"][0].data);
-      //to do: bring in lodash and use that instead of for loops
+  
+  editSheet(id:string) {
+    this.pItems = [];   
+   this.httpClient.get(API_URL + id, { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true }).subscribe(datas => {   
+     JSON.stringify(datas);
       for (var i = 0; i < datas["data"].length; i++) {
-        this.pItems.push(datas["data"][i].data[0]);
-        //console.log(this.pItems);
+        this.pItems.push(datas["data"][i]);     
       }
-      console.log(this.pItems);
-    },
+      },
       (err: HttpErrorResponse) => {
-        //  this.toastrs.error('Error occurred. Details: ' + err.name + ' ' + err.message);
-      });
-
-    return (this.pItems);
-  }
-
+    //  this.toastrs.error('Error occurred. Details: ' + err.name + ' ' + err.message);
+    });
+    //console.log(this.pItems);
+    return (this.pItems); 
+  
+   }
   getTodosFromData(): dataStuct[] {
     return this.pItems;
   }
-
   addTodo(todo: any) {
-    console.log(todo);
-    this.httpClient.post(API_URL + "addsheetInventory", todo).subscribe(datas => {
-    },
-      (err: HttpErrorResponse) => {
-        console.log(err + " " + err.message)
-      });
+    
+    this.httpClient.post(API_URL + "addsheetInventory",todo).subscribe(datas => {      
+      },
+      (err: HttpErrorResponse) => {    
+    console.log(err +" " +err.message)
+    });
     //this.pItems.push(todo);
   }
   updateTodo(todo: dataStuct) {
@@ -59,4 +61,22 @@ export class editSheetService {
   deleteTodo(todo: dataStuct) {
     this.pItems.splice(this.pItems.indexOf(todo), 1);
   }
+  saveSheet(todo) {
+    // Here you can use this.httpClient.post(this.url, body)
+    // Below is only an example
+    var id = todo.sheetId;
+    console.log(todo);
+    this.httpClient.post(API_URL+id, JSON.stringify(todo), { 
+      headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type':  'application/json' }
+      , withCredentials: true
+      }).subscribe(datas => {
+    },
+      (err: HttpErrorResponse) => {
+        console.log(err + " " + err.message)
+      });
+    //this.pItems.push(todo);
+  
+    return Observable.of(`UPDATE users SET ${todo.prop}='${todo.value}' WHERE uid=${todo.uid}`);
+  }
+
 }

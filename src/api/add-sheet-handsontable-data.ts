@@ -191,15 +191,16 @@ export const Handsondat: HandsondataInt[] = [
 
 export const dataStucts: dataStuct[] = [
   {
-    Id:"",
-    SheetName: "",
-    Date: new Date(new Date().setDate(new Date().getDate() + 0)),
-    Notes: "",
-    Ongoing: true,
+    sheetId:"",
+    sheetName: "",
+    sheetDate: new Date(new Date().setDate(new Date().getDate() + 0)),
+    sheetNotes: "",
+    active: true,
     Handsondata: Handsondat,
-    LastupdatedBy:"",
+    updated:new Date(new Date().setDate(new Date().getDate() + 0)),
+    updatedBy:"",
     createdBy:"",
-    LastUpdateDate:new Date(new Date().setDate(new Date().getDate() + 0))
+    created:new Date(new Date().setDate(new Date().getDate() + 0))
       
 }
 ]

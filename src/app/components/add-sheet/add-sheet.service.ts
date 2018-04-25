@@ -9,7 +9,8 @@ import 'rxjs/add/operator/map';
 import { inject } from '@angular/core/testing';
 import { ELEMENT_DATA } from '../../../api/view-sheet-data';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-const API_URL = "http://localhost:3000/api/";
+// const API_URL = "http://localhost:3000/api/";
+const API_URL = "http://localhost:8049/in-track/v1/sheets/";
 // const API_URL = "http://fcltcdh9s72:8049/in-track/v1/sheets/";
 // this.httpClient.post(API_URL, todo,{ headers:{'Access-Control-Allow-Origin': '*'} }).subscribe(datas => { 
 
@@ -25,8 +26,13 @@ export class AddSheetServices {
     return this.pItems;
   }
   addTodo(todo: any) {
+    
+    var id = todo.sheetId;
     console.log(todo);
-    this.httpClient.post(API_URL + "addsheetInventory", todo).subscribe(datas => {
+    this.httpClient.post(API_URL+id, JSON.stringify(todo), { 
+      headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type':  'application/json' }
+      , withCredentials: true
+      }).subscribe(datas => {
     },
       (err: HttpErrorResponse) => {
         console.log(err + " " + err.message)
