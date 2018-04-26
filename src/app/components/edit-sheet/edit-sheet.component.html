@@ -10,7 +10,7 @@
   
 
 <div class=""  >
-            <hot-table [colHeaders]="true" className="htCenter" (afterChange)="onAfterChange($event)"  #hotTable [allowEmpty]=true [manualRowMove]="true" [height]="500" [manualColumnMove]="true"
+            <hot-table [colHeaders]="true" className="htCenter" (afterChange)="onAfterChange($event)"   #hotTable [allowEmpty]=true [manualRowMove]="true" [height]="500" [manualColumnMove]="true"
               [rowHeaders]="true" [data]="dataset" [autoWrapRow]="true" [autoWrapCol]="true" [manualRowResize]="true" [manualColumnResize]="true"
               [manualColumnFreeze]="true" stretchH="all" [columnSorting]="true">
               <hot-column data="rowId" title="rowId"  [readOnly]="true" [colWidths]="80" type="numeric"></hot-column>

@@ -92,10 +92,13 @@ export class EditSheetComponent implements OnInit {
              hotInstance.setDataAtCell(j, 0, j);
             }
         }      
-        alert(newVal + prop + row); 
+        alert(newVal + prop + row);
+        var data = {value:newVal,prop:prop,rowId:row,sheetId:this.id} 
+        await this._editsheetservice.saveSheet(data);
       }      
       else{
         alert(newVal + prop + uid); 
+        await this._editsheetservice.saveSheet(data);
       }  
      
          

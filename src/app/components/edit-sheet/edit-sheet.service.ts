@@ -21,7 +21,7 @@ const API_URL = "http://localhost:8049/in-track/v1/sheets/";
 @Injectable()
 export class editSheetService {
   pItems: any[] =[];
-  
+  saveMessages: string[] = [];
 
   constructor(private httpClient: HttpClient) { 
     
@@ -61,22 +61,24 @@ export class editSheetService {
   deleteTodo(todo: dataStuct) {
     this.pItems.splice(this.pItems.indexOf(todo), 1);
   }
-  saveSheet(todo) {
+  saveSheet(data:any) {
     // Here you can use this.httpClient.post(this.url, body)
     // Below is only an example
-    var id = todo.sheetId;
-    console.log(todo);
-    this.httpClient.post(API_URL+id, JSON.stringify(todo), { 
+    var id = data.sheetId;
+    console.log(id);
+    this.httpClient.post(API_URL+id, JSON.stringify(data), { 
       headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type':  'application/json' }
       , withCredentials: true
       }).subscribe(datas => {
+
+        
     },
       (err: HttpErrorResponse) => {
         console.log(err + " " + err.message)
       });
     //this.pItems.push(todo);
   
-    return Observable.of(`UPDATE users SET ${todo.prop}='${todo.value}' WHERE uid=${todo.uid}`);
+    return Observable.of(`UPDATE users SET ${data.prop}='${data.value}' WHERE uid=${data.rowId}`);
   }
 
 }

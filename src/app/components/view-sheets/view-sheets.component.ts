@@ -153,7 +153,7 @@ export class ViewSheetsComponent implements OnInit {
 
   saveUpdateTodo(ViewSheetsElement: ViewSheetsElement) {
     const dialogRef = this.dialog.open(EditDialogComponent, {
-      data: { sheetDate: ViewSheetsElement.sheetDate, sheetId: ViewSheetsElement.sheetId, sheetNotes: ViewSheetsElement.sheetNotes, active: ViewSheetsElement.active, sheetName: ViewSheetsElement.sheetName }
+      data: {updatedBy:ViewSheetsElement.updatedBy,created:ViewSheetsElement.created,updated:ViewSheetsElement.updated,createdBy:ViewSheetsElement.createdBy, sheetDate: ViewSheetsElement.sheetDate, sheetId: ViewSheetsElement.sheetId, sheetNotes: ViewSheetsElement.sheetNotes, active: ViewSheetsElement.active, sheetName: ViewSheetsElement.sheetName }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -165,7 +165,7 @@ export class ViewSheetsComponent implements OnInit {
 
   removeToDo(ViewSheetsElement: ViewSheetsElement) {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
-      data: { sheetDate: ViewSheetsElement.sheetDate, sheetId: ViewSheetsElement.sheetId, sheetNotes: ViewSheetsElement.sheetNotes, active: ViewSheetsElement.active, sheetName: ViewSheetsElement.sheetName }
+      data: {updatedBy:ViewSheetsElement.updatedBy,created:ViewSheetsElement.created,updated:ViewSheetsElement.updated,createdBy:ViewSheetsElement.createdBy, sheetDate: ViewSheetsElement.sheetDate, sheetId: ViewSheetsElement.sheetId, sheetNotes: ViewSheetsElement.sheetNotes, active: ViewSheetsElement.active, sheetName: ViewSheetsElement.sheetName }
 
     });
     dialogRef.afterClosed().subscribe(result => {

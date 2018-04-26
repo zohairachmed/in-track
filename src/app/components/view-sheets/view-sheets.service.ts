@@ -13,8 +13,8 @@ const API_URL = "http://localhost:8049/in-track/v1/sheets/";
 
 @Injectable()
 export class ViewSheetServices {
-  pItems: ViewSheetsElement[]= []; //= ELEMENT_DATA;
-  dataLength:any;
+  pItems: ViewSheetsElement[] = []; //= ELEMENT_DATA;
+  dataLength: any;
   dataChange: BehaviorSubject<ViewSheetsElement[]> = new BehaviorSubject<ViewSheetsElement[]>([]);
   get data(): ViewSheetsElement[] { return this.dataChange.value; }
   viewRef: ViewContainerRef;
@@ -27,10 +27,10 @@ export class ViewSheetServices {
 
   getAllItems() {
     this.httpClient.get(API_URL + "list", { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true }).subscribe(result => {
- 
+
       //this.httpClient.get(API_URL + "getsheetInventory").subscribe(datas => {
       this.dataLength = result;
-      for (var i = 0; i < this.dataLength.length ; i++) {
+      for (var i = 0; i < this.dataLength.length; i++) {
         this.pItems.push(result[i]);
         //console.log(this.pItems);
       }
@@ -68,13 +68,25 @@ export class ViewSheetServices {
   // }
 
 
-  updateTodo(todo: ViewSheetsElement) {
+  updateTodo(todo: any) {
     console.log(todo);
+    this.httpClient.put(API_URL+ todo.sheetId, JSON.stringify(todo), { 
+      headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type':  'application/json' }
+      , withCredentials: true
+      }).subscribe(datas => {
+    },
+      (err: HttpErrorResponse) => {
+        console.log(err + " " + err.message)
+      });
+    //this.pItems.push(todo);
+  }
+
+
 
     // const index = this.pItems.map(x => x.Id).indexOf(todo.Id);
     // console.log(index);
     // this.pItems[index] = todo;
-  }
+  
   deleteTodo(todo: ViewSheetsElement) {
     // const index = this.pItems.findIndex(Items => Items.Id === todo.Id);
     // this.pItems.splice(index, 1);

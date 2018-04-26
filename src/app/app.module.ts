@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { ToDoComponent } from './components/to-do/to-do.component';
+import { CommonModule } from '@angular/common';
 import { TodoService } from './components/to-do/to-do.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddSheetComponent } from './components/add-sheet/add-sheet.component';
@@ -36,14 +37,18 @@ import {
 } from '@angular/material';
 import { EditSheetComponent } from './components/edit-sheet/edit-sheet.component';
 import { editSheetService } from './components/edit-sheet/edit-sheet.service';
-
+import { HomeComponent } from './components/home/home.component';
+import { LoginComponent } from './components/login/login.component';
+import { AuthGuard } from './auth/auth.guard';
+import { AuthService } from './auth/auth.service';
 
 
 var appRoutes: Routes = [
-  { path: '', component: ToDoComponent },
-  { path: 'ViewSheet', component: ViewSheetsComponent },
-  { path: 'AddSheet', component: AddSheetComponent },
-  { path: 'EditSheet', component: EditSheetComponent }
+  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: LoginComponent },
+  { path: 'ViewSheet', component: ViewSheetsComponent, canActivate: [AuthGuard] },
+  { path: 'AddSheet', component: AddSheetComponent, canActivate: [AuthGuard] },
+  { path: 'EditSheet', component: EditSheetComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({
@@ -56,7 +61,9 @@ var appRoutes: Routes = [
     ViewSheetsComponent,
     DeleteDialogComponent,
     OnemptyComponent,
-    EditSheetComponent
+    EditSheetComponent,
+    HomeComponent,
+    LoginComponent
 
 
 
@@ -64,6 +71,7 @@ var appRoutes: Routes = [
 
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     FormsModule,
     RouterModule.forRoot(appRoutes),
@@ -99,7 +107,7 @@ var appRoutes: Routes = [
     OnemptyComponent
 
   ],
-  providers: [TodoService, ViewSheetServices, AddSheetServices, editSheetService],
+  providers: [TodoService, ViewSheetServices, AddSheetServices, editSheetService,AuthService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
