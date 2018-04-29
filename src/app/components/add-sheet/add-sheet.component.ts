@@ -133,8 +133,6 @@ export class AddSheetComponent implements OnInit {
           data: data,
           sheetNotes: this.sheetNotes,
           active: this.active,   
-          updated:this.sheetDate,
-          updatedBy:'zaid',
           created:this.sheetDate,
           createdBy:'ziad'
         };
