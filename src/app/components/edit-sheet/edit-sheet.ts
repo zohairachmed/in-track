@@ -8,7 +8,7 @@ export interface dataStuct {
       updatedBy:string;
       created:Date;
       createdBy:string;
-  Handsondata: any[];
+  data: any[];
 
 }
 

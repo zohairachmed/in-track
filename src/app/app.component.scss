@@ -1,0 +1,70 @@
+.Space{
+    flex:1 1 auto;
+}
+mat-toolbar{
+  box-shadow: 0 5px 5px -3px rgba(0,0,0,.2),0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12);
+  margin-bottom:15px;
+}
+
+.footer {
+    flex: 0 0 auto;
+    padding: 0 15px;
+    text-align: center;
+    z-index: 1;
+    background: #3f51b5;
+    color: #fff;       
+    width: 100%;
+
+    .row {
+      padding: 10px 0;
+
+      .links {
+        a {
+          transition: padding 0.5s;
+          display: inline-block;
+          padding: 20px 5px;
+          color: white;
+
+          &:hover {
+            text-decoration: none;
+            color: #b3e5fc;
+          }
+
+          span {
+            display: inline-block;
+            width: 75px;
+            padding: 0 0 0 5px;
+            overflow: hidden;
+            text-align: left;
+            white-space: nowrap;
+            transition: width 0.5s;
+          }
+        }
+
+      } 
+    }
+  }
+  mat-sidenav {
+    width: 250px;
+  
+    .branding {
+      height: 64px;
+      padding: 8px 10px;
+      font-size: 20px;
+      font-weight: 500;
+  
+      img {
+        margin: 0 10px 0 0;
+      }
+  
+      span {
+        position: relative;
+        top: 3px;
+      }
+    }
+  
+    .mat-nav-list {
+      padding-top: 0;
+    }
+  }
+

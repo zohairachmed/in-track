@@ -2,10 +2,10 @@
   <h3 mat-dialog-title>Confirm Delete?</h3>
   <div mat-dialog-content>
     <table>
-      <tr>
+      <!-- <tr>
         <td>    Sheet Id:    </td>
         <td><b> {{data.sheetId}} </b></td>
-      </tr>
+      </tr> -->
       <tr>
           <td>    Sheet_Name:    </td>
           <td><b> {{data.sheetName}} </b></td>
@@ -16,12 +16,20 @@
           </tr>
           <tr>
               <td>     Date:   </td>
-              <td><b>  {{data.sheetDate}}  </b></td>
+              <td><b>  {{data.sheetDate | date: 'EE, MMM dd'}}  </b></td>
             </tr>
             <tr>
                 <td>    Notes:    </td>
                 <td><b>  {{data.sheetNotes}} </b></td>
               </tr>
+              <tr>
+                <td>     Created by :   </td>
+                <td><b>  {{data.createdBy}}  </b></td>
+              </tr>
+              <tr>
+                  <td>    Created:    </td>
+                  <td><b>  {{data.created | date: 'EE, MMM dd'}} </b></td>
+                </tr>
       
     </table>   
   </div>

@@ -20,34 +20,53 @@ const API_URL = "http://localhost:8049/in-track/v1/sheets/";
 
 @Injectable()
 export class editSheetService {
-  pItems: any[] =[];
+  ItemsRaw: any;
+  ItemsHandson: any;
+
   saveMessages: string[] = [];
 
   constructor(private httpClient: HttpClient) { 
     
   }
   
-  editSheet(id:string) {
-    this.pItems = [];   
+  editSheetRaw(id:string) {
+    this.ItemsRaw = [];   
    this.httpClient.get(API_URL + id, { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true }).subscribe(datas => {   
      JSON.stringify(datas);
-      for (var i = 0; i < datas["data"].length; i++) {
-        this.pItems.push(datas["data"][i]);     
-      }
+      // for (var i = 0; i < datas["data"].length; i++) {
+        this.ItemsRaw.push(datas);     
+      // }
+      
       },
       (err: HttpErrorResponse) => {
     //  this.toastrs.error('Error occurred. Details: ' + err.name + ' ' + err.message);
     });
     //console.log(this.pItems);
-    return (this.pItems); 
+    return (this.ItemsRaw); 
+  
+   }
+   editSheetHandsOnTable(id:string) {
+    this.ItemsHandson = [];   
+   this.httpClient.get(API_URL + id, { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true }).subscribe(datas => {   
+     JSON.stringify(datas);
+      for (var i = 0; i < datas["data"].length; i++) {
+        this.ItemsHandson.push(datas["data"][i]);     
+      }
+      
+      },
+      (err: HttpErrorResponse) => {
+    //  this.toastrs.error('Error occurred. Details: ' + err.name + ' ' + err.message);
+    });
+    //console.log(this.pItems);
+    return (this.ItemsHandson); 
   
    }
   getTodosFromData(): dataStuct[] {
-    return this.pItems;
+    return this.ItemsRaw;
   }
   addTodo(todo: any) {
     
-    this.httpClient.post(API_URL + "addsheetInventory",todo).subscribe(datas => {      
+    this.httpClient.put(API_URL + todo.sheetId,todo, { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true }).subscribe(datas => {       
       },
       (err: HttpErrorResponse) => {    
     console.log(err +" " +err.message)
@@ -59,7 +78,7 @@ export class editSheetService {
     // this.pItems[index] = todo;
   }
   deleteTodo(todo: dataStuct) {
-    this.pItems.splice(this.pItems.indexOf(todo), 1);
+    this.ItemsRaw.splice(this.ItemsRaw.indexOf(todo), 1);
   }
   saveSheet(data:any) {
     // Here you can use this.httpClient.post(this.url, body)

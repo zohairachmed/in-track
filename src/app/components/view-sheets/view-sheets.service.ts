@@ -88,7 +88,19 @@ export class ViewSheetServices {
     // this.pItems[index] = todo;
   
   deleteTodo(todo: ViewSheetsElement) {
-    // const index = this.pItems.findIndex(Items => Items.Id === todo.Id);
-    // this.pItems.splice(index, 1);
+    
+    this.httpClient.delete(API_URL + todo.sheetId, { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true }).subscribe(result => {
+    const index = this.pItems.findIndex(Items => Items.sheetId === todo.sheetId);
+    this.pItems.splice(index, 1);
+    return result;
+    
+    },
+      (err: HttpErrorResponse) => {
+        //  this.toastrs.error('Error occurred. Details: ' + err.name + ' ' + err.message);
+      });
+
   }
+
+
+  
 }

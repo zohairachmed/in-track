@@ -39,7 +39,7 @@ export enum SaveMode {
 
 
 export class ViewSheetsComponent implements OnInit {
-  displayedColumns = ['sheetName', 'sheetDate', 'sheetNotes', 'active', 'updatedBy', 'createdBy', 'created','updated', 'Buttons', 'editSheets'];
+  displayedColumns = ['sheetName', 'sheetDate', 'sheetNotes', 'active', 'updatedBy', 'createdBy', 'created','updated', 'Buttons'];//, 'editSheets'];
   formGroup: FormGroup;
   DataSources: any;
   saveMode: SaveMode = SaveMode.None;
@@ -152,15 +152,15 @@ export class ViewSheetsComponent implements OnInit {
   // }
 
   saveUpdateTodo(ViewSheetsElement: ViewSheetsElement) {
-    const dialogRef = this.dialog.open(EditDialogComponent, {
-      data: {updatedBy:ViewSheetsElement.updatedBy,created:ViewSheetsElement.created,updated:ViewSheetsElement.updated,createdBy:ViewSheetsElement.createdBy, sheetDate: ViewSheetsElement.sheetDate, sheetId: ViewSheetsElement.sheetId, sheetNotes: ViewSheetsElement.sheetNotes, active: ViewSheetsElement.active, sheetName: ViewSheetsElement.sheetName }
-    });
+    // const dialogRef = this.dialog.open(EditDialogComponent, {
+    //   data: {updatedBy:ViewSheetsElement.updatedBy,created:ViewSheetsElement.created,updated:ViewSheetsElement.updated,createdBy:ViewSheetsElement.createdBy, sheetDate: ViewSheetsElement.sheetDate, sheetId: ViewSheetsElement.sheetId, sheetNotes: ViewSheetsElement.sheetNotes, active: ViewSheetsElement.active, sheetName: ViewSheetsElement.sheetName }
+    // });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result == true) {
-        this.loadData();
-      }
-    });
+    // dialogRef.afterClosed().subscribe(result => {
+    //   if (result == true) {
+    //     this.loadData();
+    //   }
+    // });
   }
 
   removeToDo(ViewSheetsElement: ViewSheetsElement) {

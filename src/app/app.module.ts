@@ -20,6 +20,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AddDialogComponent } from './dialogs/add/add.dialog.component';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
 import {
+  MatSidenavModule,
   MatButtonModule,
   MatTableModule,
   MatCardModule
@@ -93,7 +94,8 @@ var appRoutes: Routes = [
     HotTableModule,
     MatCardModule,
     MatDialogModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatSidenavModule
 
 
   ],

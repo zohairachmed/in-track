@@ -107,12 +107,12 @@ export class AddSheetComponent implements OnInit {
       this.hot.hotInstance.setDataAtCell(i, 0, i)
     }
     //console.log(this.hot.hotInstance.getData().length);
-    this.toastr.success('Sheet Added', '', { positionClass: 'toast-bottom-right' });
+    
 
     setTimeout(() =>  {
 
       for (let index = 0; index < this.hot.hotInstance.getData().length; index++) {
-        if (this.hot.hotInstance.getDataAtRow(index)[1]) {
+        if (this.hot.hotInstance.getDataAtRow(index)[2]) {
           data.push(this.data[index].Handsondata);
 
         }
@@ -124,6 +124,7 @@ export class AddSheetComponent implements OnInit {
         dialogRef.afterClosed().subscribe(result => {
         });
       } else {
+        this.toastr.success('Sheet Added', '', { positionClass: 'toast-bottom-right' });
         let uuid = UUID.UUID();
         this.JsonData = {
           sheetId: uuid,
@@ -137,11 +138,13 @@ export class AddSheetComponent implements OnInit {
           created:this.sheetDate,
           createdBy:'ziad'
         };
-        
+        console.log(this.JsonData);
         this._AddSheetServices.addTodo(this.JsonData);
+
         data = [];
+
         for (let index = 0; index < this.hot.hotInstance.getData().length; index++) {
-          this.data[index].data = [];
+          this.data[index].Handsondata = [];
         }
         this.JsonData = [];
         this.sheetName = "";

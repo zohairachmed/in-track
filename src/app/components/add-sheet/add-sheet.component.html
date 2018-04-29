@@ -1,4 +1,4 @@
-
+<mat-sidenav-content>
 <mat-accordion class="example-headers-align">
     <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="true">
       <mat-expansion-panel-header>
@@ -90,7 +90,7 @@
           </div>
           
           <div class=""  >
-            <hot-table [colHeaders]="true" render  #hotTable [allowEmpty]=true [manualRowMove]="true" [height]="500" [minRows]="20" [manualColumnMove]="true"
+            <hot-table [colHeaders]="true" render  #hotTable [allowEmpty]=true [manualRowMove]="true" [height]="500" [minRows]="20" [maxRows]="500" [manualColumnMove]="true"
               [rowHeaders]="true" [data]="data" [autoWrapRow]="true" [autoWrapCol]="true" [manualRowResize]="true" [manualColumnResize]="true"
               [manualColumnFreeze]="true" stretchH="all" [columnSorting]="true">
               <hot-column data="Handsondata.rowId" title="rowId"  [readOnly]="true" [colWidths]="80" type="numeric" ></hot-column>
@@ -122,6 +122,7 @@
     </mat-expansion-panel>
   
   </mat-accordion>
+  </mat-sidenav-content>
   <!-- <div class=""  >
     
       <hot-table [colHeaders]="true" render #hotTable [allowEmpty]=false [manualRowMove]="true" [height]="500" [minRows]="20" [manualColumnMove]="true"

@@ -1,6 +1,7 @@
 
-import { Component, OnInit,Input,ViewChild } from '@angular/core';
-import {editSheetService} from './edit-sheet.service';
+
+import { Component, OnInit, Input, ViewChild, ViewContainerRef } from '@angular/core';
+import { editSheetService } from './edit-sheet.service';
 import { dataStuct, HandsondataInt } from './edit-sheet';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/delay';
@@ -8,6 +9,12 @@ import 'rxjs/add/observable/of';
 import * as Handsontable from 'handsontable';
 import { dataStucts } from '../../../api/add-sheet-handsontable-data';
 import { ActivatedRoute } from '@angular/router';
+import { FormControl, Validators } from '@angular/forms';
+import { ToastsManager } from 'ng2-toastr';
+import { MatDialog } from '@angular/material';
+import { OnemptyComponent } from '../../dialogs/onempty/onempty.component';
+
+
 
 @Component({
   selector: 'app-edit-sheet',
@@ -16,24 +23,59 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class EditSheetComponent implements OnInit {
   @ViewChild('hotTable') hot
-  messages:string[] = [];
-  dataset: HandsondataInt[] = [];
+  messages: string[] = [];
+  tempData:any[]=[];
+  dataset: dataStuct[];
   fetched = false;
   error = false;
   sub: any;
   id: string;
   saveMessages: string[] = [];
-
-  constructor(private _editsheetservice: editSheetService, private activatedRoute: ActivatedRoute) {
-   this.id =  this.activatedRoute.snapshot.paramMap.get('sheetId');
-     
-
-   }
+  sheetData: any[] = [];
+  sheetDate: Date;
+  sheetName: string;
+  sheetNotes: string;
+  active: boolean;
+  jsonData: any;
+  step = 0;
+  dataRaw:any;
   
-  ngOnInit() {
-    this.fetchData();
-   
+
+  constructor( public toastr: ToastsManager,public dialog: MatDialog, vcr: ViewContainerRef,private _editsheetservice: editSheetService, private activatedRoute: ActivatedRoute) {
+    
+    this.toastr.setRootViewContainerRef(vcr);
+    
+    
   }
+
+  ngOnInit() {
+    this.id = this.activatedRoute.snapshot.paramMap.get('sheetId');
+    this.fetchData();
+
+  }
+  setStep(index: number) {
+    this.step = index;
+  }
+
+  nextStep() {
+    this.step++;
+  }
+
+  prevStep() {
+    this.step--;
+  }
+  formControl = new FormControl('', [
+
+    Validators.required
+    // Validators.email,
+  ]);
+  getErrorMessage() {
+
+    return this.formControl.hasError('required') ? 'Required field' :
+      // this.formControl.hasError('email') ? 'Not a valid email' :
+      '';
+  }
+
   render(instance, td, row, col, prop, value, cellProperties) {
     Handsontable.renderers.TextRenderer.apply(this, [instance, td, row, col, prop, value, cellProperties]);
 
@@ -43,14 +85,25 @@ export class EditSheetComponent implements OnInit {
     }
   }
   fetchData(): void {
-    this.dataset = [];
-     this.dataset = this._editsheetservice.editSheet(this.id);    
+    // this.dataRaw = [];
+    // this.dataset = [];
+    this.dataRaw = this._editsheetservice.editSheetRaw(this.id);    
+    console.log(this.dataRaw);       
+    this.dataset = this._editsheetservice.editSheetHandsOnTable(this.id);     
+  setTimeout(() => {
+   this.sheetName = this.dataRaw[0].sheetName;
+    this.sheetNotes = this.dataRaw[0].sheetNotes;
+    this.sheetDate = this.dataRaw[0].sheetDate;
+    this.active = this.dataRaw[0].active;
+    }, 500);
      
-     
-      // .subscribe(
-      //   dataStucts => this.dataset = dataStucts,
-      //   err => this.error = true,
-      //   () => this.fetched = true);
+   
+
+
+    // .subscribe(
+    //   dataStucts => this.dataset = dataStucts,
+    //   err => this.error = true,
+    //   () => this.fetched = true);
   }
   // saveData(users): void {
   //   this._editsheetservice.saveSheet(users)
@@ -77,60 +130,83 @@ export class EditSheetComponent implements OnInit {
       if (oldVal === newVal) {
         return;
       }
-     
-      if(prop === 'rowId'){
+
+      if (prop === 'rowId') {
         return;
       }
-      console.log(row);
+      
       const uid = hotInstance.getDataAtCell(row, 'rowId');
-      if(uid == null || uid == undefined || uid == '')
-      {
+      if (uid == null || uid == undefined || uid == '') {
         var number = hotInstance.getDataAtProp('rowId');
-        for(var j=0;j<number.length;++j){
-            if(number[j] == null)
-            {
-             hotInstance.setDataAtCell(j, 0, j);
-            }
-        }      
-        alert(newVal + prop + row);
-        var data = {value:newVal,prop:prop,rowId:row,sheetId:this.id} 
-        await this._editsheetservice.saveSheet(data);
-      }      
-      else{
-        alert(newVal + prop + uid); 
-        await this._editsheetservice.saveSheet(data);
-      }  
-     
-         
-     
-         
-      
-             
+        for (var j = 0; j < number.length; ++j) {
+          if (number[j] == null) {
+            hotInstance.setDataAtCell(j, 0, j);
+          }
+        }
+        // alert(newVal + prop + row);
+        var data = { "value": newVal, "prop": prop, "rowId": row }
+        this.sheetData.push(data)
+        console.log(this.sheetData);
+        //await this._editsheetservice.saveSheet(data);
+      }
+      else {
+        // alert(newVal + prop + uid); 
+        var data = { "value": newVal, "prop": prop, "rowId": row }
+        this.sheetData.push(data);
+        console.log(this.sheetData);
         
-      
-    
-      
-      
-      // if(uid !== null && uid !== undefined && uid !==''){
-      //   alert(newVal + prop + uid);
-      //   //this.saveData({uid: uid, prop: prop, value: newVal});
-      // }else{
-      //  var number = hotInstance.getDataAtProp('rowId');
-      //   console.log(number);
-      //   for(var j=0;j<number.length;++j){
-      //       if(number[j] == null || number[j] == undefined || number[j] == '')
-      //       {
-      //         this.hot.hotInstance.setDataAtCell(j, 0, j)
-              
-      //       }
-      //   } 
-      //   alert(newVal + prop + uid);
-        
-      // }
+        //await this._editsheetservice.saveSheet(data);
+      }
+
+
 
     })
-   }
+  }
+  PostHandsondata() {
+    var data = this.sheetData;
 
-  
+    this.toastr.success('Sheet Added', '', { positionClass: 'toast-bottom-right' });
+
+    setTimeout(() => {
+
+    
+      // console.log(array);console.log(this.data);console.log(this.hot.hotInstance)
+      if (data.length < 1) {
+        this.toastr.error('Empty Data set', 'Required', { positionClass: 'toast-bottom-right' });
+        const dialogRef = this.dialog.open(OnemptyComponent);
+        dialogRef.afterClosed().subscribe(result => {
+        });
+      } else {        
+        this.jsonData = {
+          sheetId: this.id,
+          sheetName: this.sheetName,
+          sheetDate: this.sheetDate,
+          data: data,
+          sheetNotes: this.sheetNotes,
+          active: this.active,
+          updated: new Date(new Date().setDate(new Date().getDate() + 0)),
+          updatedBy: 'zaid',         
+        };
+        console.log(this.jsonData);
+        //this._editsheetservice.addTodo(this.jsonData);
+       // data = [];  
+        //this.sheetData = [];     
+        //this.jsonData = [];
+        //this.sheetName = "";
+        //this.sheetNotes = "";
+        //this.sheetDate = new Date(new Date().setDate(new Date().getDate() + 0));
+        //console.log(this.sheetData);
+
+
+        //   //this.hot.hotInstance.loadData([]);
+        //  // this.hot.hotInstance.render();
+        //   setTimeout(() => {
+        //     this.router.navigate(['/ViewSheet']);
+        //   }, 1000); 
+      }
+    }, 1000);
+  }
+
+
 
 }

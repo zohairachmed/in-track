@@ -42,7 +42,7 @@
     
 
     <div mat-dialog-actions>
-      <button mat-raised-button color="primary" [type]="submit" [disabled]="!formControl.valid" (click)="stopEdit(data)">Save</button>
+      <button mat-raised-button color="primary" [disabled]="!formControl.valid" (click)="stopEdit(data)">Save</button>
       <button mat-raised-button color="primary" (click)="onNoClick()" tabindex="-1">Cancel</button>
     </div>
   </form>
