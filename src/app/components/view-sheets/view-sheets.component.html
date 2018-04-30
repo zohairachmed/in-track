@@ -91,6 +91,18 @@
           </button>
         </mat-cell>
       </ng-container>
+
+      <ng-container matColumnDef="viewOnlySheets">
+          <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+          <mat-cell *matCellDef="let ViewSheetsElement">
+            <button color="primary" mat-button (click)="sheetView(ViewSheetsElement.sheetId)">
+            <!-- </button> (click)="saveUpdateTodo(ViewSheetsElement)">   -->
+              <!-- Handsonform, tableContain -->
+              View Sheet
+            </button>
+           
+          </mat-cell>
+        </ng-container>
       <!-- <ng-container matColumnDef="editSheets">
         <mat-header-cell *matHeaderCellDef> </mat-header-cell>
         <mat-cell *matCellDef="let ViewSheetsElement">

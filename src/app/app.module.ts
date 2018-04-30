@@ -19,37 +19,41 @@ import { OnemptyComponent } from './dialogs/onempty/onempty.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AddDialogComponent } from './dialogs/add/add.dialog.component';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
-import {
-  MatSidenavModule,
-  MatButtonModule,
-  MatTableModule,
-  MatCardModule
-  , MatToolbarModule
-  , MatFormFieldModule
-  , MatInputModule
-  , MatDialogModule
-  , MatOptionModule
-  , MatIconModule
-  , MatCheckboxModule
-  , MatSelectModule,
-  MatPaginatorModule,
-  MatExpansionModule,
-  MatSortModule
-} from '@angular/material';
 import { EditSheetComponent } from './components/edit-sheet/edit-sheet.component';
 import { editSheetService } from './components/edit-sheet/edit-sheet.service';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './auth/auth.guard';
 import { AuthService } from './auth/auth.service';
-
+import { ViewonlySheetsComponent } from './components/viewonly-sheets/viewonly-sheets.component';
+import {
+          MatSidenavModule,
+          MatButtonModule,
+          MatTableModule,
+          MatCardModule
+          , MatToolbarModule
+          , MatFormFieldModule
+          , MatInputModule
+          , MatDialogModule
+          , MatOptionModule
+          , MatIconModule
+          , MatCheckboxModule
+          , MatSelectModule,
+          MatPaginatorModule,
+          MatExpansionModule,
+          MatProgressBarModule,
+          MatSortModule,
+          MatChipsModule,
+          MatDividerModule
+} from '@angular/material';
 
 var appRoutes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'ViewSheet', component: ViewSheetsComponent, canActivate: [AuthGuard] },
   { path: 'AddSheet', component: AddSheetComponent, canActivate: [AuthGuard] },
-  { path: 'EditSheet', component: EditSheetComponent, canActivate: [AuthGuard] }
+  { path: 'EditSheet', component: EditSheetComponent, canActivate: [AuthGuard] },
+  { path: 'ViewOnlySheet', component: ViewonlySheetsComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({
@@ -64,12 +68,8 @@ var appRoutes: Routes = [
     OnemptyComponent,
     EditSheetComponent,
     HomeComponent,
-    LoginComponent
-
-
-
-
-
+    LoginComponent,
+    ViewonlySheetsComponent
   ],
   imports: [
     CommonModule,
@@ -77,25 +77,28 @@ var appRoutes: Routes = [
     FormsModule,
     RouterModule.forRoot(appRoutes),
     ToastModule.forRoot(),
+    HotTableModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    MatButtonModule,
-    MatPaginatorModule,
-    MatSortModule,
-    BrowserAnimationsModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatTableModule,
-    MatExpansionModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatOptionModule,
-    MatInputModule,
-    HotTableModule,
-    MatCardModule,
-    MatDialogModule,
-    MatCheckboxModule,
-    MatSidenavModule
+            MatButtonModule,
+            MatPaginatorModule,
+            MatSortModule,
+            MatToolbarModule,
+            MatIconModule,
+            MatTableModule,
+            MatExpansionModule,
+            MatFormFieldModule,
+            MatSelectModule,
+            MatOptionModule,
+            MatInputModule,
+            MatCardModule,
+            MatDialogModule,
+            MatCheckboxModule,
+            MatSidenavModule,
+            MatProgressBarModule,
+            MatChipsModule,
+            MatDividerModule
 
 
   ],
@@ -109,7 +112,7 @@ var appRoutes: Routes = [
     OnemptyComponent
 
   ],
-  providers: [TodoService, ViewSheetServices, AddSheetServices, editSheetService,AuthService, AuthGuard],
+  providers: [TodoService, ViewSheetServices, AddSheetServices, editSheetService, AuthService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

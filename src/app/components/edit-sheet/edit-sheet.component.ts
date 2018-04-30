@@ -13,6 +13,8 @@ import { FormControl, Validators } from '@angular/forms';
 import { ToastsManager } from 'ng2-toastr';
 import { MatDialog } from '@angular/material';
 import { OnemptyComponent } from '../../dialogs/onempty/onempty.component';
+import {MatChipInputEvent} from '@angular/material';
+import {ENTER, COMMA} from '@angular/cdk/keycodes';
 
 
 
@@ -39,6 +41,7 @@ export class EditSheetComponent implements OnInit {
   jsonData: any;
   step = 0;
   dataRaw:any;
+  removable: boolean = true;
   
 
   constructor( public toastr: ToastsManager,public dialog: MatDialog, vcr: ViewContainerRef,private _editsheetservice: editSheetService, private activatedRoute: ActivatedRoute) {
@@ -51,7 +54,7 @@ export class EditSheetComponent implements OnInit {
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.paramMap.get('sheetId');
     this.fetchData();
-
+    console.log(this.dataset);
   }
   setStep(index: number) {
     this.step = index;
@@ -75,7 +78,8 @@ export class EditSheetComponent implements OnInit {
       // this.formControl.hasError('email') ? 'Not a valid email' :
       '';
   }
-
+  
+  
   render(instance, td, row, col, prop, value, cellProperties) {
     Handsontable.renderers.TextRenderer.apply(this, [instance, td, row, col, prop, value, cellProperties]);
 
@@ -89,14 +93,15 @@ export class EditSheetComponent implements OnInit {
     // this.dataset = [];
     this.dataRaw = this._editsheetservice.editSheetRaw(this.id);    
     console.log(this.dataRaw);       
-    this.dataset = this._editsheetservice.editSheetHandsOnTable(this.id);     
+    this.dataset = this._editsheetservice.editSheetHandsOnTable(this.id);  
+    
+      
   setTimeout(() => {
    this.sheetName = this.dataRaw[0].sheetName;
     this.sheetNotes = this.dataRaw[0].sheetNotes;
     this.sheetDate = this.dataRaw[0].sheetDate;
     this.active = this.dataRaw[0].active;
     }, 500);
-     
    
 
 
@@ -116,7 +121,7 @@ export class EditSheetComponent implements OnInit {
   //       });
   // }
 
-  async onAfterChange($event) {
+  async onAfterChange($event, event: MatChipInputEvent) {
     if (!$event.params[0]) {
       return;
     }
@@ -144,16 +149,21 @@ export class EditSheetComponent implements OnInit {
           }
         }
         // alert(newVal + prop + row);
-        var data = { "value": newVal, "prop": prop, "rowId": row }
+        var data = { [prop]:newVal, "rowId": row }
         this.sheetData.push(data)
-        console.log(this.sheetData);
+        //console.log(this.sheetData);
+        
         //await this._editsheetservice.saveSheet(data);
       }
       else {
         // alert(newVal + prop + uid); 
-        var data = { "value": newVal, "prop": prop, "rowId": row }
+        var data = { [prop]:newVal, "rowId": row }
         this.sheetData.push(data);
-        console.log(this.sheetData);
+        //console.log(this.sheetData);        
+        
+        // console.log(Object.keys(data))
+        // console.log(Object.values(data))
+       
         
         //await this._editsheetservice.saveSheet(data);
       }
@@ -165,7 +175,7 @@ export class EditSheetComponent implements OnInit {
   PostHandsondata() {
     var data = this.sheetData;
 
-    this.toastr.success('Sheet Added', '', { positionClass: 'toast-bottom-right' });
+    
 
     setTimeout(() => {
 
@@ -187,17 +197,20 @@ export class EditSheetComponent implements OnInit {
           updated: new Date(new Date().setDate(new Date().getDate() + 0)),
           updatedBy: 'zaid',         
         };
-        console.log(this.jsonData);
-        //this._editsheetservice.addTodo(this.jsonData);
-       // data = [];  
-        //this.sheetData = [];     
-        //this.jsonData = [];
-        //this.sheetName = "";
-        //this.sheetNotes = "";
-        //this.sheetDate = new Date(new Date().setDate(new Date().getDate() + 0));
-        //console.log(this.sheetData);
-
-
+        //console.log(this.jsonData);
+        if(this.jsonData.sheetId !== null && this.jsonData.sheetName !== null ){
+          this._editsheetservice.updateSheet(this.jsonData);
+          this.toastr.success('Sheet Added', '', { positionClass: 'toast-bottom-right' });
+          data = [];  
+          this.sheetData = [];     
+          this.jsonData = [];
+         this.sheetName = "";
+          this.sheetNotes = "";
+          this.sheetDate = new Date(new Date().setDate(new Date().getDate() + 0));
+          
+  
+        }
+       
         //   //this.hot.hotInstance.loadData([]);
         //  // this.hot.hotInstance.render();
         //   setTimeout(() => {

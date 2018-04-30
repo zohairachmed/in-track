@@ -9,7 +9,6 @@ import { inject } from '@angular/core/testing';
 import { ELEMENT_DATA } from '../../../api/view-sheet-data';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-
 import 'rxjs/add/operator/delay';
 import 'rxjs/add/observable/of';
 
@@ -45,14 +44,18 @@ export class editSheetService {
     return (this.ItemsRaw); 
   
    }
+ 
    editSheetHandsOnTable(id:string) {
     this.ItemsHandson = [];   
    this.httpClient.get(API_URL + id, { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true }).subscribe(datas => {   
      JSON.stringify(datas);
+     if(datas["data"].length <1){
+      this.ItemsHandson.push({"rowId":0});
+     }else{
       for (var i = 0; i < datas["data"].length; i++) {
         this.ItemsHandson.push(datas["data"][i]);     
       }
-      
+    }
       },
       (err: HttpErrorResponse) => {
     //  this.toastrs.error('Error occurred. Details: ' + err.name + ' ' + err.message);
@@ -66,14 +69,16 @@ export class editSheetService {
   }
   addTodo(todo: any) {
     
-    this.httpClient.put(API_URL + todo.sheetId,todo, { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true }).subscribe(datas => {       
-      },
-      (err: HttpErrorResponse) => {    
-    console.log(err +" " +err.message)
-    });
-    //this.pItems.push(todo);
+    
   }
-  updateTodo(todo: dataStuct) {
+  updateSheet(todo: any) {
+    console.log(todo);    
+    this.httpClient.put(API_URL + todo.sheetId,todo, { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true }).subscribe(datas => {       
+    },
+    (err: HttpErrorResponse) => {    
+  console.log(err +" " +err.message)
+  });
+  //this.pItems.push(todo);
     // const index = this.pItems.map(x => x.ID).indexOf(todo.ID);
     // this.pItems[index] = todo;
   }

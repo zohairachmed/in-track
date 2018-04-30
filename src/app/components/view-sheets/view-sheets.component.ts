@@ -39,7 +39,7 @@ export enum SaveMode {
 
 
 export class ViewSheetsComponent implements OnInit {
-  displayedColumns = ['sheetName', 'sheetDate', 'sheetNotes', 'active', 'updatedBy', 'createdBy', 'created','updated', 'Buttons'];//, 'editSheets'];
+  displayedColumns = ['sheetName', 'sheetDate', 'sheetNotes', 'active', 'updatedBy', 'createdBy', 'created','updated', 'Buttons', 'viewOnlySheets'];//, 'editSheets'];
   formGroup: FormGroup;
   DataSources: any;
   saveMode: SaveMode = SaveMode.None;
@@ -162,7 +162,9 @@ export class ViewSheetsComponent implements OnInit {
     //   }
     // });
   }
-
+  sheetView(sheetId:string){
+    this.router.navigate(['/ViewOnlySheet', { sheetId: sheetId }]);
+  }
   removeToDo(ViewSheetsElement: ViewSheetsElement) {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       data: {updatedBy:ViewSheetsElement.updatedBy,created:ViewSheetsElement.created,updated:ViewSheetsElement.updated,createdBy:ViewSheetsElement.createdBy, sheetDate: ViewSheetsElement.sheetDate, sheetId: ViewSheetsElement.sheetId, sheetNotes: ViewSheetsElement.sheetNotes, active: ViewSheetsElement.active, sheetName: ViewSheetsElement.sheetName }

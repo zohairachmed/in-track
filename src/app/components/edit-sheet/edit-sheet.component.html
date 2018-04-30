@@ -78,7 +78,7 @@
         <div class="mat-elevation-z8">
           <mat-card class="card">
             <mat-card-subtitle>
-              <b>Date: {{sheetDate}}</b>
+              <b>Date: {{sheetDate | date: 'EE, MMM dd y'}}</b>
             </mat-card-subtitle>
             <mat-card-subtitle>
               <b>Notes: {{sheetNotes}}</b>
@@ -94,7 +94,7 @@
           </mat-card>
         </div>
 
-        <div class="">
+        <div class="">         
           <hot-table [colHeaders]="true" className="htCenter" (afterChange)="onAfterChange($event)" #hotTable [allowEmpty]=true [manualRowMove]="true"
             [height]="500" [manualColumnMove]="true" [rowHeaders]="true" [data]="dataset" [autoWrapRow]="true" [autoWrapCol]="true"
             [manualRowResize]="true" [manualColumnResize]="true" [manualColumnFreeze]="true" stretchH="all" [columnSorting]="true">
@@ -119,6 +119,17 @@
           </hot-table>
         </div>
       </div>
+      <mat-divider></mat-divider>
+
+      <mat-label>Changed in rows</mat-label>
+      <mat-form-field class="demo-chip-list">          
+          <mat-chip-list  #chipList>
+            <mat-chip *ngFor="let data of sheetData">              
+            rowId: {{data.rowId}}
+            </mat-chip>  
+          </mat-chip-list>
+        </mat-form-field>
+        
 
       <mat-action-row>
         <button mat-button color="warn" (click)="prevStep()">Previous</button>
