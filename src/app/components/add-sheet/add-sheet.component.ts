@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, ChangeDetectorRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, Renderer2, ChangeDetectorRef, ViewChild, ViewContainerRef, OnDestroy } from '@angular/core';
 import * as Handsontable from 'handsontable';
 import { MatDialog } from '@angular/material';
 import { AddSheetServices } from './add-sheet.service';
@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
 import { OnemptyComponent } from '../../dialogs/onempty/onempty.component';
 import { ToastsManager } from 'ng2-toastr';
 import { ViewSheetServices } from '../view-sheets/view-sheets.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
 
 
 @Component({
@@ -20,7 +22,7 @@ import { ViewSheetServices } from '../view-sheets/view-sheets.service';
   styleUrls: ['./add-sheet.component.css']
 
 })
-export class AddSheetComponent implements OnInit {
+export class AddSheetComponent implements OnInit,OnDestroy {
   @ViewChild('hotTable') hot
   data: any;//dataStuct[];
   rend: Renderer2;
@@ -31,7 +33,7 @@ export class AddSheetComponent implements OnInit {
   JsonData: any;
   step = 0;
   router: Router;
-
+  private alive: boolean = true;
   // settingsObj: Handsontable.GridSettings = {
   // colHeaders: ["Title", "Description", "Comments", "Cover"],
   //   columns: [
@@ -52,6 +54,9 @@ export class AddSheetComponent implements OnInit {
     this.toastr.setRootViewContainerRef(vcr);
   
 
+  }
+  ngOnDestroy() {
+    this.alive = false;
   }
 
   ngOnInit() {
@@ -99,7 +104,29 @@ export class AddSheetComponent implements OnInit {
 
     }
   }
+  createRowId():Observable<any>{
+    var dataFromRowId:any=[];
+    for (let index = 0; index < this.hot.hotInstance.getData().length; index++) {
+      if (this.hot.hotInstance.getDataAtRow(index)[2]) {
+        dataFromRowId.push(this.data[index].Handsondata);
 
+      }
+    }
+    
+    return dataFromRowId;
+  }
+  fromFunction$(factory: () => any) {
+    return Observable.create((observer) => {
+      try {
+        observer.next(this.createRowId());
+        observer.complete();
+      } catch (error) {
+        this.toastr.error('Error occurred. Details: ' + error + ' ' + error,'', { 
+          positionClass: 'toast-bottom-right' , toastLife: 800}); 
+        observer.error(error);
+      }
+    });
+  }
   PostHandsondata() {
     var data: any[] = [];
     var length = this.hot.hotInstance.getData().length;
@@ -108,23 +135,17 @@ export class AddSheetComponent implements OnInit {
     }
     //console.log(this.hot.hotInstance.getData().length);
     
-
-    setTimeout(() =>  {
-
-      for (let index = 0; index < this.hot.hotInstance.getData().length; index++) {
-        if (this.hot.hotInstance.getDataAtRow(index)[2]) {
-          data.push(this.data[index].Handsondata);
-
-        }
-      };
-      // console.log(array);console.log(this.data);console.log(this.hot.hotInstance)
+    this.fromFunction$(() => 0).subscribe((value) =>{
+      data = value;
+      
       if (data.length < 1) {
-        this.toastr.error('Empty Data set', 'Required', { positionClass: 'toast-bottom-right' });
+        this.toastr.error('Empty Data set', 'Required', { 
+          positionClass: 'toast-bottom-right' , toastLife: 800}); 
         const dialogRef = this.dialog.open(OnemptyComponent);
         dialogRef.afterClosed().subscribe(result => {
         });
       } else {
-        this.toastr.success('Sheet Added', '', { positionClass: 'toast-bottom-right' });
+      
         let uuid = UUID.UUID();
         this.JsonData = {
           sheetId: uuid,
@@ -136,8 +157,15 @@ export class AddSheetComponent implements OnInit {
           created:this.sheetDate,
           createdBy:'ziad'
         };
-        console.log(this.JsonData);
-        this._AddSheetServices.addTodo(this.JsonData);
+        //console.log(this.JsonData);
+        this._AddSheetServices.addTodo(this.JsonData).takeWhile(() => this.alive).subscribe(datas => {
+          this.toastr.success('Sheet Added', '', { 
+            positionClass: 'toast-bottom-right' , toastLife: 800}); 
+        },
+          (err: HttpErrorResponse) => {
+            this.toastr.error('Error occurred. Details: ' + err.name + ' ' + err.message,'', { 
+              positionClass: 'toast-bottom-right' , toastLife: 800});    
+          });
 
         data = [];
 
@@ -156,7 +184,21 @@ export class AddSheetComponent implements OnInit {
         //     this.router.navigate(['/ViewSheet']);
         //   }, 1000); 
       }
-    }, 1000);
+    
+    },
+    (err: HttpErrorResponse) => {
+      this.toastr.error('Error occurred. Details: ' + err.name + ' ' + err.message,'', { 
+        positionClass: 'toast-bottom-right' , toastLife: 800}); 
+    });
+      // for (let index = 0; index < this.hot.hotInstance.getData().length; index++) {
+      //   if (this.hot.hotInstance.getDataAtRow(index)[2]) {
+      //     data.push(this.data[index].Handsondata);
+
+      //   }
+      // };
+      // console.log(array);console.log(this.data);console.log(this.hot.hotInstance)
+     
+   
   }
 
 

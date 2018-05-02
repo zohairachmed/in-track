@@ -9,6 +9,7 @@ import 'rxjs/add/operator/map';
 import { inject } from '@angular/core/testing';
 import { ELEMENT_DATA } from '../../../api/view-sheet-data';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
 // const API_URL = "http://localhost:3000/api/";
 const API_URL = "http://localhost:8049/in-track/v1/sheets/";
 // const API_URL = "http://fcltcdh9s72:8049/in-track/v1/sheets/";
@@ -16,27 +17,22 @@ const API_URL = "http://localhost:8049/in-track/v1/sheets/";
 
 @Injectable()
 export class AddSheetServices {
-  pItems: dataStuct[];
+  pItems: any;
 
   constructor(private httpClient: HttpClient) {
   }
 
 
-  getTodosFromData(): dataStuct[] {
+  getTodosFromData(): Observable<any> {
     return this.pItems;
   }
-  addTodo(todo: any) {
+  addTodo(todo: any): Observable<any> {
     
-    var id = todo.sheetId;
-    console.log(todo);
-    this.httpClient.post(API_URL+id, JSON.stringify(todo), { 
+   var id = todo.sheetId;   
+   return this.httpClient.post(API_URL+id, JSON.stringify(todo), { 
       headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type':  'application/json' }
       , withCredentials: true
-      }).subscribe(datas => {
-    },
-      (err: HttpErrorResponse) => {
-        console.log(err + " " + err.message)
-      });
+      })
     //this.pItems.push(todo);
   }
   updateTodo(todo: dataStuct) {

@@ -28,40 +28,44 @@ export class editSheetService {
     
   }
   
-  editSheetRaw(id:string) {
-    this.ItemsRaw = [];   
-   this.httpClient.get(API_URL + id, { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true }).subscribe(datas => {   
-     JSON.stringify(datas);
-      // for (var i = 0; i < datas["data"].length; i++) {
-        this.ItemsRaw.push(datas);     
-      // }
+  editSheetRaw(id:string):Observable<any> {
+   // this.ItemsRaw = [];   
+   return this.httpClient.get<any>(API_URL + id, { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true });
+   
+  //  .subscribe(datas => {   
+  //    JSON.stringify(datas);
+  //     // for (var i = 0; i < datas["data"].length; i++) {
+  //       this.ItemsRaw.push(datas);     
+  //     // }
       
-      },
-      (err: HttpErrorResponse) => {
-    //  this.toastrs.error('Error occurred. Details: ' + err.name + ' ' + err.message);
-    });
-    //console.log(this.pItems);
-    return (this.ItemsRaw); 
+  //     },
+  //     (err: HttpErrorResponse) => {
+  //   //  this.toastrs.error('Error occurred. Details: ' + err.name + ' ' + err.message);
+  //   });
+  //   //console.log(this.pItems);
+  //   return (this.ItemsRaw); 
   
    }
  
-   editSheetHandsOnTable(id:string) {
-    this.ItemsHandson = [];   
-   this.httpClient.get(API_URL + id, { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true }).subscribe(datas => {   
-     JSON.stringify(datas);
-     if(datas["data"].length <1){
-      this.ItemsHandson.push({"rowId":0});
-     }else{
-      for (var i = 0; i < datas["data"].length; i++) {
-        this.ItemsHandson.push(datas["data"][i]);     
-      }
-    }
-      },
-      (err: HttpErrorResponse) => {
-    //  this.toastrs.error('Error occurred. Details: ' + err.name + ' ' + err.message);
-    });
-    //console.log(this.pItems);
-    return (this.ItemsHandson); 
+   editSheetHandsOnTable(id:string):Observable<any> {
+    //this.ItemsHandson = [];   
+   return this.httpClient.get<any>(API_URL + id, { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true })
+   
+  //  .subscribe(datas => {   
+  //    JSON.stringify(datas);
+  //    if(datas["data"].length <1){
+  //     this.ItemsHandson.push({"rowId":0});
+  //    }else{
+  //     for (var i = 0; i < datas["data"].length; i++) {
+  //       this.ItemsHandson.push(datas["data"][i]);     
+  //     }
+  //   }
+  //     },
+  //     (err: HttpErrorResponse) => {
+  //   //  this.toastrs.error('Error occurred. Details: ' + err.name + ' ' + err.message);
+  //   });
+  //   //console.log(this.pItems);
+  //   return (this.ItemsHandson); 
   
    }
   getTodosFromData(): dataStuct[] {
@@ -71,13 +75,9 @@ export class editSheetService {
     
     
   }
-  updateSheet(todo: any) {
+  updateSheet(todo: any):Observable<any> {
     console.log(todo);    
-    this.httpClient.put(API_URL + todo.sheetId,todo, { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true }).subscribe(datas => {       
-    },
-    (err: HttpErrorResponse) => {    
-  console.log(err +" " +err.message)
-  });
+    return this.httpClient.put(API_URL + todo.sheetId,todo, { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true })
   //this.pItems.push(todo);
     // const index = this.pItems.map(x => x.ID).indexOf(todo.ID);
     // this.pItems[index] = todo;
@@ -85,24 +85,24 @@ export class editSheetService {
   deleteTodo(todo: dataStuct) {
     this.ItemsRaw.splice(this.ItemsRaw.indexOf(todo), 1);
   }
-  saveSheet(data:any) {
-    // Here you can use this.httpClient.post(this.url, body)
-    // Below is only an example
-    var id = data.sheetId;
-    console.log(id);
-    this.httpClient.post(API_URL+id, JSON.stringify(data), { 
-      headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type':  'application/json' }
-      , withCredentials: true
-      }).subscribe(datas => {
+  // saveSheet(data:any) {
+  //   // Here you can use this.httpClient.post(this.url, body)
+  //   // Below is only an example
+  //   var id = data.sheetId;
+  //   console.log(id);
+  //   this.httpClient.post(API_URL+id, JSON.stringify(data), { 
+  //     headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type':  'application/json' }
+  //     , withCredentials: true
+  //     }).subscribe(datas => {
 
         
-    },
-      (err: HttpErrorResponse) => {
-        console.log(err + " " + err.message)
-      });
-    //this.pItems.push(todo);
+  //   },
+  //     (err: HttpErrorResponse) => {
+  //       console.log(err + " " + err.message)
+  //     });
+  //   //this.pItems.push(todo);
   
-    return Observable.of(`UPDATE users SET ${data.prop}='${data.value}' WHERE uid=${data.rowId}`);
-  }
+  //   return Observable.of(`UPDATE users SET ${data.prop}='${data.value}' WHERE uid=${data.rowId}`);
+  // }
 
 }

@@ -4,6 +4,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { ViewSheetsElement } from '../../components/view-sheets/view-sheets';
 import { ELEMENT_DATA } from '../../../api/view-sheet-data';
 import { ViewSheetServices } from '../../components/view-sheets/view-sheets.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-baza.dialog',
@@ -35,7 +36,12 @@ export class EditDialogComponent {
   }
 
   stopEdit(): void {
-    this.viewsheetService.updateTodo(this.data);
+    this.viewsheetService.updateTodo(this.data).subscribe(datas => {
+      
+    },
+      (err: HttpErrorResponse) => {
+        console.log(err + " " + err.message)
+      });
     this.dialogRef.close(true);
   }
 }

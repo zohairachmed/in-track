@@ -6,6 +6,8 @@ import { inject } from '@angular/core/testing';
 import { ViewSheetsElement } from './view-sheets';
 import { ELEMENT_DATA } from '../../../api/view-sheet-data';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { IfObservable } from 'rxjs/observable/IfObservable';
+import { Observable } from 'rxjs/Observable';
 
 //const API_URL = "http://localhost:3000/api/";
 const API_URL = "http://localhost:8049/in-track/v1/sheets/";
@@ -68,16 +70,18 @@ export class ViewSheetServices {
   // }
 
 
-  updateTodo(todo: any) {
+  updateTodo(todo: any):Observable<any> {
     console.log(todo);
-    this.httpClient.put(API_URL+ todo.sheetId, JSON.stringify(todo), { 
+    return this.httpClient.put(API_URL+ todo.sheetId, JSON.stringify(todo), { 
       headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type':  'application/json' }
       , withCredentials: true
-      }).subscribe(datas => {
-    },
-      (err: HttpErrorResponse) => {
-        console.log(err + " " + err.message)
       });
+      
+    //   .subscribe(datas => {
+    // },
+    //   (err: HttpErrorResponse) => {
+    //     console.log(err + " " + err.message)
+    //   });
     //this.pItems.push(todo);
   }
 
@@ -87,17 +91,20 @@ export class ViewSheetServices {
     // console.log(index);
     // this.pItems[index] = todo;
   
-  deleteTodo(todo: ViewSheetsElement) {
-    
-    this.httpClient.delete(API_URL + todo.sheetId, { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true }).subscribe(result => {
+  deleteTodo(todo: ViewSheetsElement):Observable<any> {
     const index = this.pItems.findIndex(Items => Items.sheetId === todo.sheetId);
     this.pItems.splice(index, 1);
-    return result;
+   return  this.httpClient.delete(API_URL + todo.sheetId, { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true })
     
-    },
-      (err: HttpErrorResponse) => {
-        //  this.toastrs.error('Error occurred. Details: ' + err.name + ' ' + err.message);
-      });
+    // .subscribe(result => {
+    // const index = this.pItems.findIndex(Items => Items.sheetId === todo.sheetId);
+    // this.pItems.splice(index, 1);
+    // return result;
+    
+    // },
+    //   (err: HttpErrorResponse) => {
+    //     //  this.toastrs.error('Error occurred. Details: ' + err.name + ' ' + err.message);
+    //   });
 
   }
 

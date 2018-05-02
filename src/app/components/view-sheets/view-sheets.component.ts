@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Renderer2, ElementRef, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewChild, Renderer2, ElementRef, ViewContainerRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup } from '@angular/forms';
 // import {Todo} from '../to-do/to-do';
@@ -38,7 +38,7 @@ export enum SaveMode {
 })
 
 
-export class ViewSheetsComponent implements OnInit {
+export class ViewSheetsComponent implements OnInit,OnDestroy {
   displayedColumns = ['sheetName', 'sheetDate', 'sheetNotes', 'active', 'updatedBy', 'createdBy', 'created','updated', 'Buttons', 'viewOnlySheets'];//, 'editSheets'];
   formGroup: FormGroup;
   DataSources: any;
@@ -56,13 +56,15 @@ export class ViewSheetsComponent implements OnInit {
   // ViewSheetDatabase = new ViewSheetServices();// = new ViewSheetDatabase();
   selection = new SelectionModel<string>(true, []);
   dataSource: ExampleDataSourceNew | null;
+  private alive: boolean = true;
+
   @ViewChild('table') table
   @ViewChild('filter') filter: ElementRef;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
 
-  constructor(private router: Router, private _viewsheetsService: ViewSheetServices, private _formBuilder: FormBuilder, public renderer: Renderer2, public dialog: MatDialog, public toastr: ToastsManager, vcr: ViewContainerRef) {
+  constructor(private ref:ChangeDetectorRef,private router: Router, private _viewsheetsService: ViewSheetServices, private _formBuilder: FormBuilder, public renderer: Renderer2, public dialog: MatDialog, public toastr: ToastsManager, vcr: ViewContainerRef) {
     this.formGroup = _formBuilder.group({
       'sheetId': '',
       'sheetName': '',
@@ -70,6 +72,7 @@ export class ViewSheetsComponent implements OnInit {
       'sheetDate': '',
       'active': ''
     });
+   
     this.rend = renderer;
     this.view = _viewsheetsService;
     this.toastr.setRootViewContainerRef(vcr);
@@ -92,6 +95,9 @@ export class ViewSheetsComponent implements OnInit {
     // this.getTodos();
     this.loadData();
 
+  }
+  ngOnDestroy() {
+    this.alive = false;
   }
   // isAllSelected(): boolean {
   //   if (!this.dataSource) { return false; }
@@ -123,12 +129,13 @@ export class ViewSheetsComponent implements OnInit {
   public loadData() {
     //this.ViewSheetDatabase = new ViewSheetServices();
     this.dataSource = new ExampleDataSourceNew(this.view, this.paginator, this.sort);
-    this.toastr.success('Grid Refreshed', '', { positionClass: 'toast-bottom-right' });
+    this.toastr.success('Grid Refreshed', '', { 
+      positionClass: 'toast-bottom-right' , toastLife: 800}); 
 
     this.dataSource.filteredData.length = this.view.data.length;
     Observable.fromEvent(this.filter.nativeElement, 'keyup')
       .debounceTime(150)
-      .distinctUntilChanged()
+      .distinctUntilChanged().takeWhile(() => this.alive)
       .subscribe(() => {
 
 
