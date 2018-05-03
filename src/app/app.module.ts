@@ -27,6 +27,7 @@ import { AuthGuard } from './auth/auth.guard';
 import { AuthService } from './auth/auth.service';
 import { ViewonlySheetsComponent } from './components/viewonly-sheets/viewonly-sheets.component';
 import {
+          MatProgressSpinnerModule,
           MatSidenavModule,
           MatButtonModule,
           MatTableModule,
@@ -81,6 +82,7 @@ var appRoutes: Routes = [
     BrowserAnimationsModule,
     HttpClientModule,
     ReactiveFormsModule,
+            MatProgressSpinnerModule,
             MatButtonModule,
             MatPaginatorModule,
             MatSortModule,

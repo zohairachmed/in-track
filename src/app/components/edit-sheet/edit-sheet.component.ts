@@ -57,7 +57,7 @@ export class EditSheetComponent implements OnInit,OnDestroy {
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.paramMap.get('sheetId');
     this.fetchData();
-    console.log(this.dataset);
+    //console.log(this.dataset);
   }
   setStep(index: number) {
     this.step = index;
@@ -213,12 +213,12 @@ export class EditSheetComponent implements OnInit,OnDestroy {
     
       // console.log(array);console.log(this.data);console.log(this.hot.hotInstance)
       if (data.length < 1) {
-        this.toastr.error('Empty Data set', 'Required', { 
+        this.toastr.warning('Nothing changed in sheet', '', { 
           positionClass: 'toast-bottom-right' , toastLife: 800}); 
-        const dialogRef = this.dialog.open(OnemptyComponent);
-        dialogRef.afterClosed().subscribe(result => {
-        });
-      } else {        
+        //const dialogRef = this.dialog.open(OnemptyComponent);
+        //dialogRef.afterClosed().subscribe(result => {
+       // });
+      }         
         this.jsonData = {
           sheetId: this.id,
           sheetName: this.sheetName,
@@ -229,7 +229,7 @@ export class EditSheetComponent implements OnInit,OnDestroy {
           updated: new Date(new Date().setDate(new Date().getDate() + 0)),
           updatedBy: 'zaid',         
         };
-        console.log(this.jsonData);
+       // console.log(this.jsonData);
         if(this.jsonData.sheetId !== null && this.jsonData.sheetName !== null ){
           this._editsheetservice.updateSheet(this.jsonData).takeWhile(() => this.alive).subscribe(datas => {  
             this.toastr.success('Sheet Added', '', { 
@@ -257,7 +257,7 @@ export class EditSheetComponent implements OnInit,OnDestroy {
         //   }, 1000); 
       }
 
-  }
+  
 
 
 

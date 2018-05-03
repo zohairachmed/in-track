@@ -76,7 +76,7 @@ export class editSheetService {
     
   }
   updateSheet(todo: any):Observable<any> {
-    console.log(todo);    
+    //console.log(todo);    
     return this.httpClient.put(API_URL + todo.sheetId,todo, { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true })
   //this.pItems.push(todo);
     // const index = this.pItems.map(x => x.ID).indexOf(todo.ID);

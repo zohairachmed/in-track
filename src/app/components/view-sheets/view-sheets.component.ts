@@ -12,10 +12,10 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
-import { MatDialog, MatPaginator, MatSort, DateAdapter } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, DateAdapter, MatTableDataSource } from '@angular/material';
 import { DeleteDialogComponent } from '../../dialogs/delete/delete.dialog.component';
 // import {DataService} from '../../services/data.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromEvent';
@@ -23,6 +23,7 @@ import { SelectionModel } from '@angular/cdk/collections'
 import { EditDialogComponent } from '../../dialogs/edit/edit.dialog.component';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 
 export enum SaveMode {
@@ -40,8 +41,7 @@ export enum SaveMode {
 
 export class ViewSheetsComponent implements OnInit,OnDestroy {
   displayedColumns = ['sheetName', 'sheetDate', 'sheetNotes', 'active', 'updatedBy', 'createdBy', 'created','updated', 'Buttons', 'viewOnlySheets'];//, 'editSheets'];
-  formGroup: FormGroup;
-  DataSources: any;
+  formGroup: FormGroup; 
   saveMode: SaveMode = SaveMode.None;
   headerText: string;
   // datalength:number;
@@ -52,11 +52,12 @@ export class ViewSheetsComponent implements OnInit,OnDestroy {
   active: boolean;
   rend: Renderer2;
   sheetId: string;
-  view: ViewSheetServices;
+  //view: ViewSheetServices;
   // ViewSheetDatabase = new ViewSheetServices();// = new ViewSheetDatabase();
   selection = new SelectionModel<string>(true, []);
   dataSource: ExampleDataSourceNew | null;
   private alive: boolean = true;
+  isLoadingResults = true;
 
   @ViewChild('table') table
   @ViewChild('filter') filter: ElementRef;
@@ -73,8 +74,7 @@ export class ViewSheetsComponent implements OnInit,OnDestroy {
       'active': ''
     });
    
-    this.rend = renderer;
-    this.view = _viewsheetsService;
+    this.rend = renderer;    
     this.toastr.setRootViewContainerRef(vcr);
   }
   formControl = new FormControl('', [
@@ -91,9 +91,14 @@ export class ViewSheetsComponent implements OnInit,OnDestroy {
   // showEditForm(ViewSheetsElement: ViewSheetsElement[]){
 
   // }
-  ngOnInit() {
+  ngOnInit() {    
+    this.isLoadingResults = true;
     // this.getTodos();
     this.loadData();
+    setTimeout(() => {
+      this.isLoadingResults = false;
+    }, 1000);
+   
 
   }
   ngOnDestroy() {
@@ -128,29 +133,36 @@ export class ViewSheetsComponent implements OnInit,OnDestroy {
 
   public loadData() {
     //this.ViewSheetDatabase = new ViewSheetServices();
-    this.dataSource = new ExampleDataSourceNew(this.view, this.paginator, this.sort);
-    this.toastr.success('Grid Refreshed', '', { 
-      positionClass: 'toast-bottom-right' , toastLife: 800}); 
-
-    this.dataSource.filteredData.length = this.view.data.length;
-    Observable.fromEvent(this.filter.nativeElement, 'keyup')
-      .debounceTime(150)
-      .distinctUntilChanged().takeWhile(() => this.alive)
-      .subscribe(() => {
-
-
-
-        if (!this.dataSource) {
-
-          return;
-        }
-
-        //alert(this.ViewSheetDatabase.pItems.length)
-        //this.dataSource.filteredData.length =  this.ViewSheetDatabase.pItems.length;
-        this.dataSource.filter = this.filter.nativeElement.value;
-
-      });
+   
+    this.dataSource =  new ExampleDataSourceNew(this._viewsheetsService, this.paginator, this.sort);       
+    
+      this.toastr.success('Grid Refreshed', '', { 
+        positionClass: 'toast-bottom-right' , toastLife: 800}); 
+       
+      this.dataSource.filteredData.length = this.dataSource.data.length;
+      Observable.fromEvent(this.filter.nativeElement, 'keyup')
+        .debounceTime(150)
+        .distinctUntilChanged().takeWhile(() => this.alive)
+        .subscribe(() => {
+  
+          
+  
+          if (!this.dataSource) {
+            
+            return;
+           
+          }
+  
+          //alert(this.ViewSheetDatabase.pItems.length)
+          //this.dataSource.filteredData.length =  this.ViewSheetDatabase.pItems.length;
+          this.dataSource.filter = this.filter.nativeElement.value;
+      
+        });
+      
+    // this.ref.detectChanges();
+ 
   }
+ 
 
 
   // getTodos() {
@@ -226,6 +238,13 @@ export class ViewSheetsComponent implements OnInit,OnDestroy {
 
 export class ExampleDataSourceNew extends DataSource<ViewSheetsElement> {
   _filterChange = new BehaviorSubject('');
+  pItems: ViewSheetsElement[] = []; //= ELEMENT_DATA;
+  interval: Subscription;
+  dataLength: any;
+  dataChange: BehaviorSubject<ViewSheetsElement[]> = new BehaviorSubject<ViewSheetsElement[]>([]);
+  get data(): ViewSheetsElement[] { 
+    
+    return this.dataChange.value; }
   get filter(): string { return this._filterChange.value; }
   set filter(filter: string) { this._filterChange.next(filter); }
 
@@ -247,9 +266,25 @@ export class ExampleDataSourceNew extends DataSource<ViewSheetsElement> {
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<ViewSheetsElement[]> {
 
+    this.interval = this._exampleDatabase.getAllItems().subscribe(result => {    
+      //this.httpClient.get(API_URL + "getsheetInventory").subscribe(datas => {
+      this.dataLength = result;
+      for (var i = 0; i < this.dataLength.length; i++) {
+        this.pItems.push(result[i]);
+        //console.log(this.pItems);
+      }
+      //this.pItems =  datas["data"][0]; 
+      //console.log(this.pItems.data);
+      this.dataChange.next(this.pItems);
+     
+
+    },
+      (err: HttpErrorResponse) => {
+        //  this.toastrs.error('Error occurred. Details: ' + err.name + ' ' + err.message);
+      });
     // Listen for any changes in the base data, sorting, filtering, or pagination
     const displayDataChanges = [
-      this._exampleDatabase.dataChange,
+      this.dataChange,
       this._sort.sortChange,
       this._filterChange,
       this._paginator.page,
@@ -258,14 +293,14 @@ export class ExampleDataSourceNew extends DataSource<ViewSheetsElement> {
 
     return Observable.merge(...displayDataChanges).map(() => {
       // Filter data
-      this.filteredData = this._exampleDatabase.data.slice().filter((item: ViewSheetsElement) => {
-        console
+      this.filteredData = this.data.slice().filter((item: ViewSheetsElement) => {
+        
         let searchStr = (item.sheetId + item.sheetName + item.sheetNotes + item.sheetDate).toLowerCase();
 
         return searchStr.indexOf(this.filter.toLowerCase()) != -1;
 
       });
-
+    
       // Sort filtered data
       const sortedData = this.sortData(this.filteredData.slice());
 
@@ -278,7 +313,8 @@ export class ExampleDataSourceNew extends DataSource<ViewSheetsElement> {
   }
 
 
-  disconnect() { }
+  disconnect() { this.interval.unsubscribe()
+    }
 
   /** Returns a sorted copy of the database data. */
   sortData(data: ViewSheetsElement[]): ViewSheetsElement[] {

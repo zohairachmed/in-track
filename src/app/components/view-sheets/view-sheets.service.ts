@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { ToastsManager } from 'ng2-toastr';
-import { ViewContainerRef, Injectable, Injector } from '@angular/core';
+import { ViewContainerRef, Injectable, Injector, OnInit } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { inject } from '@angular/core/testing';
 import { ViewSheetsElement } from './view-sheets';
@@ -14,36 +14,41 @@ const API_URL = "http://localhost:8049/in-track/v1/sheets/";
 // this.httpClient.get(API_URL + "list",{ headers:{'Access-Control-Allow-Origin': '*'} }).subscribe(datas => {
 
 @Injectable()
-export class ViewSheetServices {
-  pItems: ViewSheetsElement[] = []; //= ELEMENT_DATA;
-  dataLength: any;
-  dataChange: BehaviorSubject<ViewSheetsElement[]> = new BehaviorSubject<ViewSheetsElement[]>([]);
-  get data(): ViewSheetsElement[] { return this.dataChange.value; }
+export class ViewSheetServices  {
+   pItems: ViewSheetsElement[] = []; //= ELEMENT_DATA;
+   dataLength: any;
+  // dataChange: BehaviorSubject<ViewSheetsElement[]> = new BehaviorSubject<ViewSheetsElement[]>([]);
+  // get data(): ViewSheetsElement[] { 
+    
+  //   return this.dataChange.value; }
   viewRef: ViewContainerRef;
   toastrs: ToastsManager;
   constructor(private httpClient: HttpClient) {
     //this.http  = httpClient; 
-    this.getAllItems()
+    //this.getAllItems();
 
   }
 
-  getAllItems() {
-    this.httpClient.get(API_URL + "list", { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true }).subscribe(result => {
 
-      //this.httpClient.get(API_URL + "getsheetInventory").subscribe(datas => {
-      this.dataLength = result;
-      for (var i = 0; i < this.dataLength.length; i++) {
-        this.pItems.push(result[i]);
-        //console.log(this.pItems);
-      }
-      //this.pItems =  datas["data"][0]; 
-      //console.log(this.pItems.data);
-      this.dataChange.next(this.pItems);
+  getAllItems():Observable<any> {
+   // this.pItems = [];
+    return this.httpClient.get(API_URL + "list", { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true });
+    // .subscribe(result => {    
+    //   //this.httpClient.get(API_URL + "getsheetInventory").subscribe(datas => {
+    //   this.dataLength = result;
+    //   for (var i = 0; i < this.dataLength.length; i++) {
+    //     this.pItems.push(result[i]);
+    //     //console.log(this.pItems);
+    //   }
+    //   //this.pItems =  datas["data"][0]; 
+    //   //console.log(this.pItems.data);
+    //   this.dataChange.next(this.pItems);
+     
 
-    },
-      (err: HttpErrorResponse) => {
-        //  this.toastrs.error('Error occurred. Details: ' + err.name + ' ' + err.message);
-      });
+    // },
+    //   (err: HttpErrorResponse) => {
+    //     //  this.toastrs.error('Error occurred. Details: ' + err.name + ' ' + err.message);
+    //   });
 
   }
 
@@ -53,9 +58,23 @@ export class ViewSheetServices {
 
   // }
 
-  getTodosFromData(): ViewSheetsElement[] {
-    return this.pItems;
-  }
+  // getTodosFromData() {
+  //   this.httpClient.get(API_URL + "list", { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true }).subscribe(result => {
+
+  //     //this.httpClient.get(API_URL + "getsheetInventory").subscribe(datas => {
+  //     this.dataLength = result;
+  //     for (var i = 0; i < this.dataLength.length; i++) {
+  //       this.pItems.push(result[i]);
+      
+  //     }
+      
+   
+  //   },
+  //     (err: HttpErrorResponse) => {
+  //       //  this.toastrs.error('Error occurred. Details: ' + err.name + ' ' + err.message);
+  //     });
+  //     return this.pItems;
+  // }
 
   // addTodo(todo: ViewSheetsElement) {
   //   this.httpClient.get(API_URL + "addsheetInventory").subscribe(datas => {      
@@ -71,7 +90,7 @@ export class ViewSheetServices {
 
 
   updateTodo(todo: any):Observable<any> {
-    console.log(todo);
+    //console.log(todo);
     return this.httpClient.put(API_URL+ todo.sheetId, JSON.stringify(todo), { 
       headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type':  'application/json' }
       , withCredentials: true
@@ -109,5 +128,5 @@ export class ViewSheetServices {
   }
 
 
-  
+
 }
