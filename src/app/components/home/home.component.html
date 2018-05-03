@@ -1,3 +1,37 @@
 <mat-sidenav-content>
     <p>Yay! You are logged in!</p>
+    <div style="width: 40%;">
+        <canvas
+            baseChart
+            [chartType]="'line'"
+            [datasets]="chartData"
+            [labels]="chartLabels"
+            [options]="chartOptions"
+            [legend]="true"
+            (chartClick)="onChartClick($event)">
+        </canvas>
+      
+      </div>
+      <div style="width: 40%;">
+
+      <canvas baseChart 
+      [chartType]="chartType"
+      [data]="chartDataDough"
+      [labels]="chartLabelsDough"
+      [options]="chartOptionsDough">
+</canvas>
+</div>
+<div style="width: 40%;">
+
+<canvas
+      baseChart
+      [chartType]="'bar'"
+      [datasets]="chartDataBar"
+      [labels]="LabelsBar"
+      [options]="chartOptionsBar"
+      [legend]="true"
+      [colors]="colorsBar"
+      (chartClick)="onChartClickBar($event)">
+  </canvas>
+  </div>
 </mat-sidenav-content>

@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChild, Renderer2, ElementRef, ViewContainerRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup } from '@angular/forms';
-// import {Todo} from '../to-do/to-do';
-// import { TodoService } from '../to-do/to-do.service';
 import { CheckType } from '@angular/core/src/view';
 import { ViewSheetServices } from './view-sheets.service';
 import { ViewSheetsElement } from './view-sheets';
@@ -14,7 +12,6 @@ import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import { MatDialog, MatPaginator, MatSort, DateAdapter, MatTableDataSource } from '@angular/material';
 import { DeleteDialogComponent } from '../../dialogs/delete/delete.dialog.component';
-// import {DataService} from '../../services/data.service';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
@@ -39,22 +36,14 @@ export enum SaveMode {
 })
 
 
-export class ViewSheetsComponent implements OnInit,OnDestroy {
-  displayedColumns = ['sheetName', 'sheetDate', 'sheetNotes', 'active', 'updatedBy', 'createdBy', 'created','updated', 'Buttons', 'viewOnlySheets'];//, 'editSheets'];
-  formGroup: FormGroup; 
-  saveMode: SaveMode = SaveMode.None;
-  headerText: string;
-  // datalength:number;
-  Arrayextra: any;
+export class ViewSheetsComponent implements OnInit, OnDestroy {
+  displayedColumns = ['sheetName', 'sheetDate', 'sheetNotes', 'active', 'updatedBy', 'createdBy', 'created', 'updated', 'Buttons', 'viewOnlySheets'];//, 'editSheets'];
   sheetDate: Date;
   sheetName: string;
   sheetNotes: string;
   active: boolean;
   rend: Renderer2;
   sheetId: string;
-  //view: ViewSheetServices;
-  // ViewSheetDatabase = new ViewSheetServices();// = new ViewSheetDatabase();
-  selection = new SelectionModel<string>(true, []);
   dataSource: ExampleDataSourceNew | null;
   private alive: boolean = true;
   isLoadingResults = true;
@@ -65,16 +54,8 @@ export class ViewSheetsComponent implements OnInit,OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
 
 
-  constructor(private ref:ChangeDetectorRef,private router: Router, private _viewsheetsService: ViewSheetServices, private _formBuilder: FormBuilder, public renderer: Renderer2, public dialog: MatDialog, public toastr: ToastsManager, vcr: ViewContainerRef) {
-    this.formGroup = _formBuilder.group({
-      'sheetId': '',
-      'sheetName': '',
-      'sheetNotes': '',
-      'sheetDate': '',
-      'active': ''
-    });
-   
-    this.rend = renderer;    
+  constructor(private ref: ChangeDetectorRef, private router: Router, private _viewsheetsService: ViewSheetServices, private _formBuilder: FormBuilder, public renderer: Renderer2, public dialog: MatDialog, public toastr: ToastsManager, vcr: ViewContainerRef) {
+    this.rend = renderer;
     this.toastr.setRootViewContainerRef(vcr);
   }
   formControl = new FormControl('', [
@@ -88,105 +69,54 @@ export class ViewSheetsComponent implements OnInit,OnDestroy {
       // this.formControl.hasError('email') ? 'Not a valid email' :
       '';
   }
-  // showEditForm(ViewSheetsElement: ViewSheetsElement[]){
 
-  // }
-  ngOnInit() {    
+  ngOnInit() {
     this.isLoadingResults = true;
-    // this.getTodos();
     this.loadData();
     setTimeout(() => {
       this.isLoadingResults = false;
     }, 1000);
-   
+
 
   }
   ngOnDestroy() {
     this.alive = false;
   }
-  // isAllSelected(): boolean {
-  //   if (!this.dataSource) { return false; }
-  //   if (this.selection.isEmpty()) { return false; }
-
-  //   if (this.filter.nativeElement.value) {
-
-  //     return this.selection.selected.length == this.dataSource.renderedData.length;
-
-  //   } else {
-
-  //     return this.selection.selected.length == this.view.data.length;
-  //   }
-  // }
-
-  // masterToggle() {
-  //   if (!this.dataSource) { return; }
-
-  //   if (this.isAllSelected()) {
-  //     this.selection.clear();
-  //   } else if (this.filter.nativeElement.value) {
-  //     this.dataSource.renderedData.forEach(data => this.selection.select(data.Id));
-  //   } else {
-  //     this.view.data.forEach(data => this.selection.select(data.Id));
-  //   }
-  // }
 
 
   public loadData() {
     //this.ViewSheetDatabase = new ViewSheetServices();
-   
-    this.dataSource =  new ExampleDataSourceNew(this._viewsheetsService, this.paginator, this.sort);       
-    
-      this.toastr.success('Grid Refreshed', '', { 
-        positionClass: 'toast-bottom-right' , toastLife: 800}); 
-       
-      this.dataSource.filteredData.length = this.dataSource.data.length;
-      Observable.fromEvent(this.filter.nativeElement, 'keyup')
-        .debounceTime(150)
-        .distinctUntilChanged().takeWhile(() => this.alive)
-        .subscribe(() => {
-  
-          
-  
-          if (!this.dataSource) {
-            
-            return;
-           
-          }
-  
-          //alert(this.ViewSheetDatabase.pItems.length)
-          //this.dataSource.filteredData.length =  this.ViewSheetDatabase.pItems.length;
-          this.dataSource.filter = this.filter.nativeElement.value;
-      
-        });
-      
-    // this.ref.detectChanges();
- 
+
+    this.dataSource = new ExampleDataSourceNew(this._viewsheetsService, this.paginator, this.sort);
+
+    this.toastr.success('Grid Refreshed', '', {
+      positionClass: 'toast-bottom-right', toastLife: 800
+    });
+
+    this.dataSource.filteredData.length = this.dataSource.data.length;
+    Observable.fromEvent(this.filter.nativeElement, 'keyup')
+      .debounceTime(150)
+      .distinctUntilChanged().takeWhile(() => this.alive)
+      .subscribe(() => {
+
+
+
+        if (!this.dataSource) {
+
+          return;
+
+        }
+        this.dataSource.filter = this.filter.nativeElement.value;
+
+      });
   }
- 
 
-
-  // getTodos() {
-  //   return this._viewsheetsService.getTodosFromData();
-
-  // }
-
-  saveUpdateTodo(ViewSheetsElement: ViewSheetsElement) {
-    // const dialogRef = this.dialog.open(EditDialogComponent, {
-    //   data: {updatedBy:ViewSheetsElement.updatedBy,created:ViewSheetsElement.created,updated:ViewSheetsElement.updated,createdBy:ViewSheetsElement.createdBy, sheetDate: ViewSheetsElement.sheetDate, sheetId: ViewSheetsElement.sheetId, sheetNotes: ViewSheetsElement.sheetNotes, active: ViewSheetsElement.active, sheetName: ViewSheetsElement.sheetName }
-    // });
-
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (result == true) {
-    //     this.loadData();
-    //   }
-    // });
-  }
-  sheetView(sheetId:string){
+  sheetView(sheetId: string) {
     this.router.navigate(['/ViewOnlySheet', { sheetId: sheetId }]);
   }
   removeToDo(ViewSheetsElement: ViewSheetsElement) {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
-      data: {updatedBy:ViewSheetsElement.updatedBy,created:ViewSheetsElement.created,updated:ViewSheetsElement.updated,createdBy:ViewSheetsElement.createdBy, sheetDate: ViewSheetsElement.sheetDate, sheetId: ViewSheetsElement.sheetId, sheetNotes: ViewSheetsElement.sheetNotes, active: ViewSheetsElement.active, sheetName: ViewSheetsElement.sheetName }
+      data: { updatedBy: ViewSheetsElement.updatedBy, created: ViewSheetsElement.created, updated: ViewSheetsElement.updated, createdBy: ViewSheetsElement.createdBy, sheetDate: ViewSheetsElement.sheetDate, sheetId: ViewSheetsElement.sheetId, sheetNotes: ViewSheetsElement.sheetNotes, active: ViewSheetsElement.active, sheetName: ViewSheetsElement.sheetName }
 
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -197,42 +127,11 @@ export class ViewSheetsComponent implements OnInit,OnDestroy {
 
     })
   }
-  SheetEdit(sheetId :string){
+  SheetEdit(sheetId: string) {
     this.router.navigate(['/EditSheet', { sheetId: sheetId }]);
     //console.log(Id);
   }
 
-  cancelEditTodo() {
-    this.formGroup.reset();
-    this.saveMode = SaveMode.None;
-  }
-
-  // showEditForm(ViewSheetsElement, Handsonform) {
-  //   if (!ViewSheetsElement) {
-  //     return;
-  //   }
-  //    //this.rend.setStyle(tableContain, 'display', 'none');
-  //    this.rend.setStyle(Handsonform, 'display', 'block');
-  //   //this.saveMode = SaveMode.Edit;
-  //   //this.headerText = 'Edit To-Do';
-  //    const editedTodo = Object.assign({}, ViewSheetsElement, { Date: this.applyLocale(ViewSheetsElement.Date) });     
-  //     this.formGroup.setValue(editedTodo);
-
-  // }
-
-  showNewForm() {
-    this.formGroup.reset();
-    this.saveMode = SaveMode.New;
-    this.headerText = 'New To-Do';
-  }
-
-  showForm() {
-    return this.saveMode !== SaveMode.None;
-  }
-
-  applyLocale(Date) {
-    return new DatePipe(navigator.language).transform(Date, 'y-MM-dd');
-  }
 }
 
 
@@ -242,9 +141,10 @@ export class ExampleDataSourceNew extends DataSource<ViewSheetsElement> {
   interval: Subscription;
   dataLength: any;
   dataChange: BehaviorSubject<ViewSheetsElement[]> = new BehaviorSubject<ViewSheetsElement[]>([]);
-  get data(): ViewSheetsElement[] { 
-    
-    return this.dataChange.value; }
+  get data(): ViewSheetsElement[] {
+
+    return this.dataChange.value;
+  }
   get filter(): string { return this._filterChange.value; }
   set filter(filter: string) { this._filterChange.next(filter); }
 
@@ -257,30 +157,25 @@ export class ExampleDataSourceNew extends DataSource<ViewSheetsElement> {
     private _sort: MatSort) {
     super();
     this._filterChange.subscribe(() => this._paginator.pageIndex = 0);
-    // this.filteredData.length = this.filteredData.length;
-    //alert(this.filteredData.length = 10);
-    // alert(this.filteredData);
+
   }
 
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<ViewSheetsElement[]> {
 
-    this.interval = this._exampleDatabase.getAllItems().subscribe(result => {    
-      //this.httpClient.get(API_URL + "getsheetInventory").subscribe(datas => {
+    this.interval = this._exampleDatabase.getAllItems().subscribe(result => {
+
       this.dataLength = result;
       for (var i = 0; i < this.dataLength.length; i++) {
         this.pItems.push(result[i]);
-        //console.log(this.pItems);
       }
-      //this.pItems =  datas["data"][0]; 
-      //console.log(this.pItems.data);
       this.dataChange.next(this.pItems);
-     
+
 
     },
       (err: HttpErrorResponse) => {
-        //  this.toastrs.error('Error occurred. Details: ' + err.name + ' ' + err.message);
+        console.log('Error occurred. Details: ' + err.name + ' ' + err.message);
       });
     // Listen for any changes in the base data, sorting, filtering, or pagination
     const displayDataChanges = [
@@ -294,16 +189,12 @@ export class ExampleDataSourceNew extends DataSource<ViewSheetsElement> {
     return Observable.merge(...displayDataChanges).map(() => {
       // Filter data
       this.filteredData = this.data.slice().filter((item: ViewSheetsElement) => {
-        
         let searchStr = (item.sheetId + item.sheetName + item.sheetNotes + item.sheetDate).toLowerCase();
-
         return searchStr.indexOf(this.filter.toLowerCase()) != -1;
-
       });
-    
+
       // Sort filtered data
       const sortedData = this.sortData(this.filteredData.slice());
-
       // Grab the page's slice of the filtered sorted data.
       const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
       this.renderedData = sortedData.splice(startIndex, this._paginator.pageSize);
@@ -313,8 +204,9 @@ export class ExampleDataSourceNew extends DataSource<ViewSheetsElement> {
   }
 
 
-  disconnect() { this.interval.unsubscribe()
-    }
+  disconnect() {
+    this.interval.unsubscribe()
+  }
 
   /** Returns a sorted copy of the database data. */
   sortData(data: ViewSheetsElement[]): ViewSheetsElement[] {

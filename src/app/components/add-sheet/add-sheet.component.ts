@@ -22,7 +22,7 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['./add-sheet.component.css']
 
 })
-export class AddSheetComponent implements OnInit,OnDestroy {
+export class AddSheetComponent implements OnInit, OnDestroy {
   @ViewChild('hotTable') hot
   data: any;//dataStuct[];
   rend: Renderer2;
@@ -33,17 +33,10 @@ export class AddSheetComponent implements OnInit,OnDestroy {
   JsonData: any;
   step = 0;
   router: Router;
+  error = false;
+  isLoadingResults = true;
   private alive: boolean = true;
-  // settingsObj: Handsontable.GridSettings = {
-  // colHeaders: ["Title", "Description", "Comments", "Cover"],
-  //   columns: [
-  //     {data: "title", renderer: "html"},
-  //     {data: "description", renderer: "html"},
-  //     {data: "comments", renderer: "html"},
-  //     {data: "cover", renderer: "html"}
-  //   ],
-  //   rowHeaders: true
-  // }
+
 
   constructor(private _AddSheetServices: AddSheetServices, public renderer: Renderer2, public dialog: MatDialog,
     private refs: ChangeDetectorRef, private routers: Router, public toastr: ToastsManager, vcr: ViewContainerRef) {
@@ -52,7 +45,7 @@ export class AddSheetComponent implements OnInit,OnDestroy {
     this.router = routers;
     this.sheetDate = new Date(new Date().setDate(new Date().getDate() + 0));
     this.toastr.setRootViewContainerRef(vcr);
-  
+
 
   }
   ngOnDestroy() {
@@ -60,8 +53,7 @@ export class AddSheetComponent implements OnInit,OnDestroy {
   }
 
   ngOnInit() {
-    //console.log (this.data);
-
+    this.isLoadingResults = false;
   }
   setStep(index: number) {
     this.step = index;
@@ -70,15 +62,6 @@ export class AddSheetComponent implements OnInit,OnDestroy {
   nextStep() {
     this.step++;
 
-    // get the count of the rows in the table
-    // get the count of the columns in the table.
-
-    // for (var rowing = 0; rowing < this.hot.hotInstance.countRows(); rowing++) {  // go through each row of the table
-    //   // go through each column of the row
-    //   var cell = this.hot.hotInstance.getCell(rowing, 0);
-    //   cell.style.background = "#D3D3D3";
-
-    // }
   }
 
   prevStep() {
@@ -104,15 +87,16 @@ export class AddSheetComponent implements OnInit,OnDestroy {
 
     }
   }
-  createRowId():Observable<any>{
-    var dataFromRowId:any=[];
+  createRowId(): Observable<any> {
+    var dataFromRowId: any = [];
     for (let index = 0; index < this.hot.hotInstance.getData().length; index++) {
       if (this.hot.hotInstance.getDataAtRow(index)[2]) {
+        this.data[index].Handsondata.rowId = index;
         dataFromRowId.push(this.data[index].Handsondata);
-
       }
+
     }
-    
+
     return dataFromRowId;
   }
   fromFunction$(factory: () => any) {
@@ -121,90 +105,84 @@ export class AddSheetComponent implements OnInit,OnDestroy {
         observer.next(this.createRowId());
         observer.complete();
       } catch (error) {
-        this.toastr.error('Error occurred. Details: ' + error + ' ' + error,'', { 
-          positionClass: 'toast-bottom-right' , toastLife: 800}); 
+        this.toastr.error('Error occurred. Details: ' + error + ' ' + error, '', {
+          positionClass: 'toast-bottom-right', toastLife: 800
+        });
         observer.error(error);
       }
     });
   }
   PostHandsondata() {
-    var data: any[] = [];
-    var length = this.hot.hotInstance.getData().length;
-    for (var i = 0; i < length; i++) {
-      this.hot.hotInstance.setDataAtCell(i, 0, i)
-    }
-    //console.log(this.hot.hotInstance.getData().length);
-    
-    this.fromFunction$(() => 0).subscribe((value) =>{
-      data = value;
-      
-      if (data.length < 1) {
-        this.toastr.error('Empty Data set', 'Required', { 
-          positionClass: 'toast-bottom-right' , toastLife: 800}); 
-        const dialogRef = this.dialog.open(OnemptyComponent);
-        dialogRef.afterClosed().subscribe(result => {
-        });
-      } else {
-      
-        let uuid = UUID.UUID();
-        this.JsonData = {
-          sheetId: uuid,
-          sheetName: this.sheetName,
-          sheetDate: this.sheetDate,
-          data: data,
-          sheetNotes: this.sheetNotes,
-          active: this.active,   
-          created:this.sheetDate,
-          createdBy:'ziad'
-        };
-        //console.log(this.JsonData);
-        this._AddSheetServices.addTodo(this.JsonData).takeWhile(() => this.alive).subscribe(datas => {
-          this.toastr.success('Sheet Added', '', { 
-            positionClass: 'toast-bottom-right' , toastLife: 800}); 
-        },
-          (err: HttpErrorResponse) => {
-            this.toastr.error('Error occurred. Details: ' + err.name + ' ' + err.message,'', { 
-              positionClass: 'toast-bottom-right' , toastLife: 800});    
+    this.isLoadingResults = true;
+    setTimeout(() => {
+
+
+      var data: any[] = [];
+      var length = this.hot.hotInstance.getData().length;
+      this.fromFunction$(() => 0).subscribe((value) => {
+        data = value;
+
+        if (data.length < 1) {
+          this.toastr.error('Empty Data set', 'Required', {
+            positionClass: 'toast-bottom-right', toastLife: 800
           });
+          this.isLoadingResults = false;
+          const dialogRef = this.dialog.open(OnemptyComponent);
+          dialogRef.afterClosed().subscribe(result => {
+          });
+        } else {
 
-        data = [];
+          let uuid = UUID.UUID();
+          this.JsonData = {
+            sheetId: uuid,
+            sheetName: this.sheetName,
+            sheetDate: this.sheetDate,
+            data: data,
+            sheetNotes: this.sheetNotes,
+            active: this.active,
+            created: this.sheetDate,
+            createdBy: 'ziad'
+          };
 
-        for (let index = 0; index < this.hot.hotInstance.getData().length; index++) {
-          this.data[index].Handsondata = [];
+          this._AddSheetServices.addTodo(this.JsonData).takeWhile(() => this.alive).subscribe(datas => {
+            this.toastr.success('Sheet Added', '', {
+              positionClass: 'toast-bottom-right', toastLife: 800
+            });
+            this.isLoadingResults = false;
+          },
+            (err: HttpErrorResponse) => {
+              this.error = true;
+              this.toastr.error('Error occurred. Details: ' + err.name + ' ' + err.message, '', {
+                positionClass: 'toast-bottom-right', toastLife: 800
+              });
+              this.isLoadingResults = false;
+            });
+
+
+          data = [];
+          for (let index = 0; index < this.hot.hotInstance.getData().length; index++) {
+            this.data[index].Handsondata = [];
+          }
+          this.JsonData = [];
+          this.sheetName = "";
+          this.sheetNotes = "";
+          this.sheetDate = new Date(new Date().setDate(new Date().getDate() + 0));
+
+
         }
-        this.JsonData = [];
-        this.sheetName = "";
-        this.sheetNotes = "";
-        this.sheetDate = new Date(new Date().setDate(new Date().getDate() + 0));
 
+      },
+        (err: HttpErrorResponse) => {
+          this.toastr.error('Error occurred. Details: ' + err.name + ' ' + err.message, '', {
+            positionClass: 'toast-bottom-right', toastLife: 800
+          });
+          this.isLoadingResults = false;
+        });
 
-        //   //this.hot.hotInstance.loadData([]);
-        //  // this.hot.hotInstance.render();
-        //   setTimeout(() => {
-        //     this.router.navigate(['/ViewSheet']);
-        //   }, 1000); 
-      }
-    
-    },
-    (err: HttpErrorResponse) => {
-      this.toastr.error('Error occurred. Details: ' + err.name + ' ' + err.message,'', { 
-        positionClass: 'toast-bottom-right' , toastLife: 800}); 
-    });
-      // for (let index = 0; index < this.hot.hotInstance.getData().length; index++) {
-      //   if (this.hot.hotInstance.getDataAtRow(index)[2]) {
-      //     data.push(this.data[index].Handsondata);
+    }, 300);
 
-      //   }
-      // };
-      // console.log(array);console.log(this.data);console.log(this.hot.hotInstance)
-     
-   
   }
 
-
-  // detectChanges(){
-  //   this.refs.markForCheck();
-  // }
   ShowHandsontable(SheetInput, DateInput, NotesInput, OngoingInput, HandsonTable, Handsonform) {
     // this.rend.setValue(SheetTitle,SheetInput)
     this.sheetName = SheetInput;

@@ -1,4 +1,7 @@
 <mat-sidenav-content>
+    <div class="example-loading-shade" *ngIf="isLoadingResults">
+        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+      </div>
 <mat-accordion class="example-headers-align">
     <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="true">
       <mat-expansion-panel-header>

@@ -25,6 +25,7 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './auth/auth.guard';
 import { AuthService } from './auth/auth.service';
+import { ChartsModule } from 'ng2-charts';
 import { ViewonlySheetsComponent } from './components/viewonly-sheets/viewonly-sheets.component';
 import {
           MatProgressSpinnerModule,
@@ -81,6 +82,7 @@ var appRoutes: Routes = [
     HotTableModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    ChartsModule,
     ReactiveFormsModule,
             MatProgressSpinnerModule,
             MatButtonModule,

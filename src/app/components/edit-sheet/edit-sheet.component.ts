@@ -13,8 +13,8 @@ import { FormControl, Validators } from '@angular/forms';
 import { ToastsManager } from 'ng2-toastr';
 import { MatDialog } from '@angular/material';
 import { OnemptyComponent } from '../../dialogs/onempty/onempty.component';
-import {MatChipInputEvent} from '@angular/material';
-import {ENTER, COMMA} from '@angular/cdk/keycodes';
+import { MatChipInputEvent } from '@angular/material';
+import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { HttpErrorResponse } from '@angular/common/http';
 
 
@@ -24,16 +24,11 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './edit-sheet.component.html',
   styleUrls: ['./edit-sheet.component.css']
 })
-export class EditSheetComponent implements OnInit,OnDestroy {
+export class EditSheetComponent implements OnInit, OnDestroy {
   @ViewChild('hotTable') hot
-  messages: string[] = [];
-  tempData:any[]=[];
-  dataset: any[]=[];
-  fetched = false;
+  dataset: any[] = [];
   error = false;
-  sub: any;
   id: string;
-  saveMessages: string[] = [];
   sheetData: any[] = [];
   sheetDate: Date;
   sheetName: string;
@@ -41,15 +36,13 @@ export class EditSheetComponent implements OnInit,OnDestroy {
   active: boolean;
   jsonData: any;
   step = 0;
-  dataRaw:any[]=[];
-  removable: boolean = true;
+  dataRaw: any[] = [];
   private alive: boolean = true;
 
-  constructor( public toastr: ToastsManager,public dialog: MatDialog, vcr: ViewContainerRef,private _editsheetservice: editSheetService, private activatedRoute: ActivatedRoute) {
-    
+  constructor(public toastr: ToastsManager, public dialog: MatDialog, vcr: ViewContainerRef, private _editsheetservice: editSheetService, private activatedRoute: ActivatedRoute) {
+
     this.toastr.setRootViewContainerRef(vcr);
-    
-    
+
   }
   ngOnDestroy() {
     this.alive = false;
@@ -81,8 +74,8 @@ export class EditSheetComponent implements OnInit,OnDestroy {
       // this.formControl.hasError('email') ? 'Not a valid email' :
       '';
   }
-  
-  
+
+
   render(instance, td, row, col, prop, value, cellProperties) {
     Handsontable.renderers.TextRenderer.apply(this, [instance, td, row, col, prop, value, cellProperties]);
 
@@ -92,67 +85,47 @@ export class EditSheetComponent implements OnInit,OnDestroy {
     }
   }
   fetchData(): void {
-    this._editsheetservice.editSheetRaw(this.id).takeWhile(() => this.alive).subscribe(datas => {   
-         JSON.stringify(datas);
-      
-            this.dataRaw.push(datas); 
-            this.toastr.success('Data loaded', '', { 
-              positionClass: 'toast-bottom-right' , toastLife: 800}); 
-            this.sheetName = this.dataRaw[0].sheetName;
-            this.sheetNotes = this.dataRaw[0].sheetNotes;
-            this.sheetDate = this.dataRaw[0].sheetDate;
-            this.active = this.dataRaw[0].active;
-          },
-          (err: HttpErrorResponse) => {          
-          this.toastr.error('Error occurred. Details: ' + err.name + ' ' + err.message,'', { 
-            positionClass: 'toast-bottom-right' , toastLife: 800}); 
-        });  
-        
-        this._editsheetservice.editSheetHandsOnTable(this.id).takeWhile(() => this.alive).subscribe(datas => {   
-          JSON.stringify(datas);
-          
-            if(datas["data"].length <1){
-             this.dataset.push({"rowId":0});
-            }else{
-             for (var i = 0; i < datas["data"].length; i++) {
-               this.dataset.push(datas["data"][i]);     
-             }
-           }
-           this.toastr.success('Sheet loaded', '', { 
-            positionClass: 'toast-bottom-right' , toastLife: 800}); 
-             }, 
-           (err: HttpErrorResponse) => {          
-           this.toastr.error('Error occurred. Details: ' + err.name + ' ' + err.message,'', { 
-            positionClass: 'toast-bottom-right' , toastLife: 800}); 
-         }); 
-        
-    //  this._editsheetservice.editSheetHandsOnTable(this.id);  
-    
-      
-  //setTimeout(() => {
-  //  this.sheetName = this.dataRaw[0].sheetName;
-  //   this.sheetNotes = this.dataRaw[0].sheetNotes;
-  //   this.sheetDate = this.dataRaw[0].sheetDate;
-  //   this.active = this.dataRaw[0].active;
-    //}, 800);
-   
+    this._editsheetservice.editSheetRaw(this.id).takeWhile(() => this.alive).subscribe(datas => {
+      JSON.stringify(datas);
+
+      this.dataRaw.push(datas);
+      this.toastr.success('Data loaded', '', {
+        positionClass: 'toast-bottom-right', toastLife: 800
+      });
+      this.sheetName = this.dataRaw[0].sheetName;
+      this.sheetNotes = this.dataRaw[0].sheetNotes;
+      this.sheetDate = this.dataRaw[0].sheetDate;
+      this.active = this.dataRaw[0].active;
+    },
+      (err: HttpErrorResponse) => {
+        this.toastr.error('Error occurred. Details: ' + err.name + ' ' + err.message, '', {
+          positionClass: 'toast-bottom-right', toastLife: 800
+        });
+      });
+
+    this._editsheetservice.editSheetHandsOnTable(this.id).takeWhile(() => this.alive).subscribe(datas => {
+      JSON.stringify(datas);
+
+      if (datas["data"].length < 1) {
+        this.dataset.push({ "rowId": 0 });
+      } else {
+        for (var i = 0; i < datas["data"].length; i++) {
+          this.dataset.push(datas["data"][i]);
+        }
+      }
+      this.toastr.success('Sheet loaded', '', {
+        positionClass: 'toast-bottom-right', toastLife: 800
+      });
+    },
+      (err: HttpErrorResponse) => {
+        this.toastr.error('Error occurred. Details: ' + err.name + ' ' + err.message, '', {
+          positionClass: 'toast-bottom-right', toastLife: 800
+        });
+      });
 
 
-    // .subscribe(
-    //   dataStucts => this.dataset = dataStucts,
-    //   err => this.error = true,
-    //   () => this.fetched = true);
   }
-  // saveData(users): void {
-  //   this._editsheetservice.saveSheet(users)
-  //     .subscribe(
-  //       messages => {
-  //         Observable.of('Request Complete!').delay(2800)
-  //                   .subscribe(() => {
-  //                     this.saveMessages.splice(0, 0, ...messages);
-  //                   });
-  //       });
-  // }
+
 
   async onAfterChange($event, event: MatChipInputEvent) {
     if (!$event.params[0]) {
@@ -172,7 +145,7 @@ export class EditSheetComponent implements OnInit,OnDestroy {
       if (prop === 'rowId') {
         return;
       }
-      
+
       const uid = hotInstance.getDataAtCell(row, 'rowId');
       if (uid == null || uid == undefined || uid == '') {
         var number = hotInstance.getDataAtProp('rowId');
@@ -181,24 +154,16 @@ export class EditSheetComponent implements OnInit,OnDestroy {
             hotInstance.setDataAtCell(j, 0, j);
           }
         }
-        // alert(newVal + prop + row);
-        var data = { [prop]:newVal, "rowId": row }
+
+        var data = { [prop]: newVal, "rowId": row }
         this.sheetData.push(data)
-        //console.log(this.sheetData);
-        
-        //await this._editsheetservice.saveSheet(data);
+
       }
       else {
-        // alert(newVal + prop + uid); 
-        var data = { [prop]:newVal, "rowId": row }
+
+        var data = { [prop]: newVal, "rowId": row }
         this.sheetData.push(data);
-        //console.log(this.sheetData);        
-        
-        // console.log(Object.keys(data))
-        // console.log(Object.values(data))
-       
-        
-        //await this._editsheetservice.saveSheet(data);
+
       }
 
 
@@ -207,58 +172,44 @@ export class EditSheetComponent implements OnInit,OnDestroy {
   }
   PostHandsondata() {
     var data = this.sheetData;
-
-    
-
-    
-      // console.log(array);console.log(this.data);console.log(this.hot.hotInstance)
-      if (data.length < 1) {
-        this.toastr.warning('Nothing changed in sheet', '', { 
-          positionClass: 'toast-bottom-right' , toastLife: 800}); 
-        //const dialogRef = this.dialog.open(OnemptyComponent);
-        //dialogRef.afterClosed().subscribe(result => {
-       // });
-      }         
-        this.jsonData = {
-          sheetId: this.id,
-          sheetName: this.sheetName,
-          sheetDate: this.sheetDate,
-          data: data,
-          sheetNotes: this.sheetNotes,
-          active: this.active,
-          updated: new Date(new Date().setDate(new Date().getDate() + 0)),
-          updatedBy: 'zaid',         
-        };
-       // console.log(this.jsonData);
-        if(this.jsonData.sheetId !== null && this.jsonData.sheetName !== null ){
-          this._editsheetservice.updateSheet(this.jsonData).takeWhile(() => this.alive).subscribe(datas => {  
-            this.toastr.success('Sheet Added', '', { 
-              positionClass: 'toast-bottom-right' , toastLife: 800});    
-          },
-          (err: HttpErrorResponse) => {    
-            this.toastr.error('Error occurred. Details: ' + err.name + ' ' + err.message,'', { 
-              positionClass: 'toast-bottom-right' , toastLife: 800});       
+    if (data.length < 1) {
+      this.toastr.warning('Nothing changed in sheet', '', {
+        positionClass: 'toast-bottom-right', toastLife: 800
+      });
+    }
+    this.jsonData = {
+      sheetId: this.id,
+      sheetName: this.sheetName,
+      sheetDate: this.sheetDate,
+      data: data,
+      sheetNotes: this.sheetNotes,
+      active: this.active,
+      updated: new Date(new Date().setDate(new Date().getDate() + 0)),
+      updatedBy: 'zaid',
+    }
+    if (this.jsonData.sheetId !== null && this.jsonData.sheetName !== null) {
+      this._editsheetservice.updateSheet(this.jsonData).takeWhile(() => this.alive).subscribe(datas => {
+        this.toastr.success('Sheet Added', '', {
+          positionClass: 'toast-bottom-right', toastLife: 800
+        });
+      },
+        (err: HttpErrorResponse) => {
+          this.toastr.error('Error occurred. Details: ' + err.name + ' ' + err.message, '', {
+            positionClass: 'toast-bottom-right', toastLife: 800
           });
+          this.error = true;
+        });
           
-          data = [];  
-          this.sheetData = [];     
-          this.jsonData = [];
-          this.sheetName = "";
-          this.sheetNotes = "";
-          this.sheetDate = new Date(new Date().setDate(new Date().getDate() + 0));
-          
-  
-        }
-       
-        //   //this.hot.hotInstance.loadData([]);
-        //  // this.hot.hotInstance.render();
-        //   setTimeout(() => {
-        //     this.router.navigate(['/ViewSheet']);
-        //   }, 1000); 
-      }
-
-  
+      data = [];
+      this.sheetData = [];
+      this.jsonData = [];
+      this.sheetName = "";
+      this.sheetNotes = "";
+      this.sheetDate = new Date(new Date().setDate(new Date().getDate() + 0));
 
 
+    }
+
+  }
 
 }

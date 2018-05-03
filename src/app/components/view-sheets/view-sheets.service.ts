@@ -8,123 +8,35 @@ import { ELEMENT_DATA } from '../../../api/view-sheet-data';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { IfObservable } from 'rxjs/observable/IfObservable';
 import { Observable } from 'rxjs/Observable';
-
-//const API_URL = "http://localhost:3000/api/";
 const API_URL = "http://localhost:8049/in-track/v1/sheets/";
-// this.httpClient.get(API_URL + "list",{ headers:{'Access-Control-Allow-Origin': '*'} }).subscribe(datas => {
+
 
 @Injectable()
-export class ViewSheetServices  {
-   pItems: ViewSheetsElement[] = []; //= ELEMENT_DATA;
-   dataLength: any;
-  // dataChange: BehaviorSubject<ViewSheetsElement[]> = new BehaviorSubject<ViewSheetsElement[]>([]);
-  // get data(): ViewSheetsElement[] { 
-    
-  //   return this.dataChange.value; }
-  viewRef: ViewContainerRef;
-  toastrs: ToastsManager;
+export class ViewSheetServices {
+  pItems: ViewSheetsElement[] = []; //= ELEMENT_DATA;
+  dataLength: any;
   constructor(private httpClient: HttpClient) {
-    //this.http  = httpClient; 
-    //this.getAllItems();
-
   }
 
 
-  getAllItems():Observable<any> {
-   // this.pItems = [];
+  getAllItems(): Observable<any> {
     return this.httpClient.get(API_URL + "list", { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true });
-    // .subscribe(result => {    
-    //   //this.httpClient.get(API_URL + "getsheetInventory").subscribe(datas => {
-    //   this.dataLength = result;
-    //   for (var i = 0; i < this.dataLength.length; i++) {
-    //     this.pItems.push(result[i]);
-    //     //console.log(this.pItems);
-    //   }
-    //   //this.pItems =  datas["data"][0]; 
-    //   //console.log(this.pItems.data);
-    //   this.dataChange.next(this.pItems);
-     
-
-    // },
-    //   (err: HttpErrorResponse) => {
-    //     //  this.toastrs.error('Error occurred. Details: ' + err.name + ' ' + err.message);
-    //   });
-
   }
 
-  // GetDataforFilterandPagination(){    
-  // console.log(this.pItems);
-  //   this.dataChange.next(this.pItems);
 
-  // }
-
-  // getTodosFromData() {
-  //   this.httpClient.get(API_URL + "list", { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true }).subscribe(result => {
-
-  //     //this.httpClient.get(API_URL + "getsheetInventory").subscribe(datas => {
-  //     this.dataLength = result;
-  //     for (var i = 0; i < this.dataLength.length; i++) {
-  //       this.pItems.push(result[i]);
-      
-  //     }
-      
-   
-  //   },
-  //     (err: HttpErrorResponse) => {
-  //       //  this.toastrs.error('Error occurred. Details: ' + err.name + ' ' + err.message);
-  //     });
-  //     return this.pItems;
-  // }
-
-  // addTodo(todo: ViewSheetsElement) {
-  //   this.httpClient.get(API_URL + "addsheetInventory").subscribe(datas => {      
-  //     console.log(datas);
-  //     this.pItems =  datas;
-  //     this.dataChange.next(this.pItems.data);  
-  //     },
-  //     (err: HttpErrorResponse) => {
-  //   //  this.toastrs.error('Error occurred. Details: ' + err.name + ' ' + err.message);
-  //   });
-  //   this.pItems.push(todo);
-  // }
-
-
-  updateTodo(todo: any):Observable<any> {
+  updateTodo(todo: any): Observable<any> {
     //console.log(todo);
-    return this.httpClient.put(API_URL+ todo.sheetId, JSON.stringify(todo), { 
-      headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type':  'application/json' }
+    return this.httpClient.put(API_URL + todo.sheetId, JSON.stringify(todo), {
+      headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
       , withCredentials: true
-      });
-      
-    //   .subscribe(datas => {
-    // },
-    //   (err: HttpErrorResponse) => {
-    //     console.log(err + " " + err.message)
-    //   });
-    //this.pItems.push(todo);
+    });
   }
 
-  
 
-    // const index = this.pItems.map(x => x.Id).indexOf(todo.Id);
-    // console.log(index);
-    // this.pItems[index] = todo;
-  
-  deleteTodo(todo: ViewSheetsElement):Observable<any> {
+  deleteTodo(todo: ViewSheetsElement): Observable<any> {
     const index = this.pItems.findIndex(Items => Items.sheetId === todo.sheetId);
     this.pItems.splice(index, 1);
-   return  this.httpClient.delete(API_URL + todo.sheetId, { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true })
-    
-    // .subscribe(result => {
-    // const index = this.pItems.findIndex(Items => Items.sheetId === todo.sheetId);
-    // this.pItems.splice(index, 1);
-    // return result;
-    
-    // },
-    //   (err: HttpErrorResponse) => {
-    //     //  this.toastrs.error('Error occurred. Details: ' + err.name + ' ' + err.message);
-    //   });
-
+    return this.httpClient.delete(API_URL + todo.sheetId, { headers: { 'Access-Control-Allow-Origin': '*' }, withCredentials: true })
   }
 
 

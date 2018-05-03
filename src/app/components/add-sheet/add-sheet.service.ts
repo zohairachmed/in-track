@@ -12,8 +12,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 // const API_URL = "http://localhost:3000/api/";
 const API_URL = "http://localhost:8049/in-track/v1/sheets/";
-// const API_URL = "http://fcltcdh9s72:8049/in-track/v1/sheets/";
-// this.httpClient.post(API_URL, todo,{ headers:{'Access-Control-Allow-Origin': '*'} }).subscribe(datas => { 
+
 
 @Injectable()
 export class AddSheetServices {
@@ -32,14 +31,7 @@ export class AddSheetServices {
    return this.httpClient.post(API_URL+id, JSON.stringify(todo), { 
       headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type':  'application/json' }
       , withCredentials: true
-      })
-    //this.pItems.push(todo);
-  }
-  updateTodo(todo: dataStuct) {
-    // const index = this.pItems.map(x => x.ID).indexOf(todo.ID);
-    // this.pItems[index] = todo;
-  }
-  deleteTodo(todo: dataStuct) {
-    this.pItems.splice(this.pItems.indexOf(todo), 1);
-  }
+      })  
+  }  
+ 
 }
