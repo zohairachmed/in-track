@@ -11,8 +11,10 @@ import { ELEMENT_DATA } from '../../../api/view-sheet-data';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 // const API_URL = "http://localhost:3000/api/";
-const API_URL = "http://localhost:8049/in-track/v1/sheets/";
+import { environment } from '../../../environments/environment';
+//const API_URL = "http://localhost:8049/in-track/v1/sheets/";
 
+const API_URL = environment.api_url;
 
 @Injectable()
 export class AddSheetServices {

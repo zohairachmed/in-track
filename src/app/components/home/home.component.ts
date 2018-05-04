@@ -1,13 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { User } from '../../_models/index';
+import { UserService } from '../../_services/index';
 // import 'chart.piecelabel.js';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
+  moduleId: module.id.toString()
 
 })
 export class HomeComponent implements OnInit {
+  currentUser: User;
+  users: User[] = [];
   chartOptions = {
     responsive: true
   };
@@ -24,6 +29,7 @@ export class HomeComponent implements OnInit {
       }
     }
   }
+  
   chartData = [
     { data: [330, 600, 260, 700], label: 'Account A' },
     { data: [120, 455, 100, 340], label: 'Account B' },
@@ -64,6 +70,7 @@ export class HomeComponent implements OnInit {
     }
   ]
   
+  
   // CHART CLICK EVENT.
   onChartClick(event) {
     console.log(event);
@@ -72,7 +79,9 @@ export class HomeComponent implements OnInit {
   onChartClickBar(event) {
     console.log(event);
   }
-  constructor() { }
+  constructor(private userService: UserService) { 
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  }
 
   ngOnInit() {
     // this.httpService.get('./assets/sales.json', {responseType: 'json'}).subscribe(
@@ -83,6 +92,13 @@ export class HomeComponent implements OnInit {
     //       console.log (err.message);
     //   }
     //   );
+    //this.loadAllUsers();
   }
+//   deleteUser(id: number) {
+//     this.userService.delete(id).subscribe(() => { this.loadAllUsers() });
+// }
 
+// private loadAllUsers() {
+//     this.userService.getAll().subscribe(users => { this.users = users; });
+// }
 }

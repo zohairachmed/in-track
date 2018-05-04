@@ -38,16 +38,13 @@ export class AuthService {
 //     // true or false
 //     return !this.jwtHelper.isTokenExpired(token);
 //   }
-  login(user: User){
-    if (user.userName !== '' && user.password != '' ) { // {3}
-      this.loggedIn.next(true);
-      this.router.navigate(['/']);
-    }
+  login(){   
+      this.loggedIn.next(true);  
   }
 
   logout() {                            // {4}
     this.loggedIn.next(false);
-    localStorage.removeItem("user");
-    this.router.navigate(['/login']);
+  
+   
   }
 }

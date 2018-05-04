@@ -75,7 +75,7 @@ export class ViewSheetsComponent implements OnInit, OnDestroy {
     this.loadData();
     setTimeout(() => {
       this.isLoadingResults = false;
-    }, 1000);
+    }, 2000);
 
 
   }

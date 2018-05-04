@@ -40,20 +40,25 @@
 </nav> -->
 <!-- <button mat-button>My Button</button> -->
 <mat-sidenav-container fullscreen>
+ 
   
-<mat-toolbar color="primary" *ngIf="isLoggedIn$ | async as isLoggedIn" >
+<mat-toolbar color="primary" *ngIf="isLoggedIn$ | async as isLoggedIn">
   <mat-toolbar-row>  
-    <button mat-button routerLink="/"><mat-icon>home</mat-icon><b> Home</b></button>
-    <button mat-button routerLink="/ViewSheet"><mat-icon>notes</mat-icon><b> View Sheet</b></button>
-    <button mat-button routerLink="/AddSheet"><mat-icon>add</mat-icon><b> Add Record in Sheet</b></button>
-    <button mat-button routerLink="/EditSheet" disabled><mat-icon>edit</mat-icon><b> Edit Record in Sheet</b></button>
-
-  <span class="Space"> </span>
+      <mat-toolbar-row>  
+      <button mat-button routerLink="/"><mat-icon>home</mat-icon><b> Home</b></button>
+      <button mat-button routerLink="/ViewSheet"><mat-icon>notes</mat-icon><b> View Sheet</b></button>
+      <button mat-button routerLink="/AddSheet"><mat-icon>add</mat-icon><b> Add Record in Sheet</b></button>
+      <button mat-button routerLink="/EditSheet" disabled><mat-icon>edit</mat-icon><b> Edit Record in Sheet</b></button>
   
-    <!-- more HTML template code -->
-    <button mat-button (click)="onLogout()" *ngIf="isLoggedIn">Logout</button>
+    <span class="Space"> </span>
+    
+      <!-- more HTML template code -->
+       <button mat-button *ngIf="isLoggedIn"> {{currentUser?.firstName}}</button> 
+      <button mat-raised-button color="primary" *ngIf="isLoggedIn" (click)="onLogout()">Logout</button>
+    </mat-toolbar-row>
   </mat-toolbar-row>
 </mat-toolbar>
+
 
 <router-outlet></router-outlet> 
 <div class="footer" >

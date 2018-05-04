@@ -23,16 +23,36 @@ import { EditSheetComponent } from './components/edit-sheet/edit-sheet.component
 import { editSheetService } from './components/edit-sheet/edit-sheet.service';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
-import { AuthGuard } from './auth/auth.guard';
+// import { AuthGuard } from './auth/auth.guard';
 import { AuthService } from './auth/auth.service';
 import { ChartsModule } from 'ng2-charts';
 import { ViewonlySheetsComponent } from './components/viewonly-sheets/viewonly-sheets.component';
+
+//import { LoginComponent } from './login/index';
+//import { RegisterComponent } from './register/index';
+//import { AuthGuard } from './_guards/index';
+import {  HTTP_INTERCEPTORS } from '@angular/common/http';
+
+// used to create fake backend
+import { fakeBackendProvider } from './_helpers/index';
+
+//import { AppComponent }  from './app.component';
+//import { routing }        from './app.routing';
+
+import { AlertComponent } from './_directives/index';
+import { AuthGuard } from './_guards/index';
+import { JwtInterceptor } from './_helpers/index';
+import { AlertService, AuthenticationService, UserService } from './_services/index';
+//import { HomeComponent } from './home/index';
+//import { LoginComponent } from './login/index';
+import { RegisterComponent } from './register/index';
 import {
           MatProgressSpinnerModule,
           MatSidenavModule,
           MatButtonModule,
           MatTableModule,
-          MatCardModule
+          MatCardModule,
+          MatListModule          
           , MatToolbarModule
           , MatFormFieldModule
           , MatInputModule
@@ -50,12 +70,18 @@ import {
 } from '@angular/material';
 
 var appRoutes: Routes = [
-  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
-  { path: 'login', component: LoginComponent },
+  // { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+  // { path: 'login', component: LoginComponent },
   { path: 'ViewSheet', component: ViewSheetsComponent, canActivate: [AuthGuard] },
   { path: 'AddSheet', component: AddSheetComponent, canActivate: [AuthGuard] },
   { path: 'EditSheet', component: EditSheetComponent, canActivate: [AuthGuard] },
-  { path: 'ViewOnlySheet', component: ViewonlySheetsComponent, canActivate: [AuthGuard] }
+  { path: 'ViewOnlySheet', component: ViewonlySheetsComponent, canActivate: [AuthGuard] },
+  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+    { path: 'login', component: LoginComponent },
+    { path: 'register', component: RegisterComponent },
+
+    // otherwise redirect to home
+{ path: '**', redirectTo: '' }
 ];
 
 @NgModule({
@@ -71,7 +97,9 @@ var appRoutes: Routes = [
     EditSheetComponent,
     HomeComponent,
     LoginComponent,
-    ViewonlySheetsComponent
+    ViewonlySheetsComponent,
+    AlertComponent,        
+    RegisterComponent
   ],
   imports: [
     CommonModule,
@@ -91,6 +119,7 @@ var appRoutes: Routes = [
             MatToolbarModule,
             MatIconModule,
             MatTableModule,
+            MatListModule,
             MatExpansionModule,
             MatFormFieldModule,
             MatSelectModule,
@@ -116,7 +145,19 @@ var appRoutes: Routes = [
     OnemptyComponent
 
   ],
-  providers: [TodoService, ViewSheetServices, AddSheetServices, editSheetService, AuthService, AuthGuard],
+  providers: [TodoService, ViewSheetServices, AddSheetServices, editSheetService, AuthService,
+    AuthGuard,
+    AlertService,
+    AuthenticationService,
+    UserService,
+    {
+        provide: HTTP_INTERCEPTORS,
+        useClass: JwtInterceptor,
+        multi: true
+    },
+
+    // provider used to create fake backend
+fakeBackendProvider],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
