@@ -4,14 +4,14 @@ const path = require('path');
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, 'src')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 // app.get('*', (req, res) => {
 //   res.sendFile(path.join(__dirname + '/dist/index.html'));
 // });
 
 app.get('*', function (req, res) {
-    const index = path.join(__dirname, 'index.html');
+    const index = path.join(__dirname, 'dist/index.html');
     res.sendFile(index);
 });
 
